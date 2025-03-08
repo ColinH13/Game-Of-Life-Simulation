@@ -1,28 +1,20 @@
 
 
-package pkgDriver;
-
+package pkgCHcsc133;
 
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
-import org.lwjgl.system.*;
+import pkgCHUtils.CHWindowManager;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.system.MemoryUtil.*;
-
 
 public class Driver {
-    GLFWErrorCallback errorCallback;
-    GLFWKeyCallback keyCallback;
-    GLFWFramebufferSizeCallback fbCallback;
-    long window;
-    static int WIN_WIDTH = 1800, WIN_HEIGHT = 1200;
-    int WIN_POS_X = 30, WIN_POX_Y = 90;
+    //long window;
+    static int WIN_WIDTH = 1800, WIN_HEIGHT = 1200, WIN_POS_X = 30, WIN_POX_Y = 90;
     private static final int OGL_MATRIX_SIZE = 16;
     // call glCreateProgram() here - we have no gl-context here
     int shader_program;
@@ -30,63 +22,24 @@ public class Driver {
     FloatBuffer myFloatBuffer = BufferUtils.createFloatBuffer(OGL_MATRIX_SIZE);
     int vpMatLocation = 0, renderColorLocation = 0;
     public static void main(String[] args) {
-        new Driver().render();
+        CHWindowManager myWM = CHWindowManager.get(WIN_WIDTH, WIN_HEIGHT,
+                WIN_POS_X, WIN_POX_Y);
+        myWM = CHWindowManager.get();
+        myWM = CHWindowManager.get(2*WIN_WIDTH, 2*WIN_HEIGHT, WIN_POS_X,
+                WIN_POX_Y);
+        new Driver().render(myWM);
     } // public static void main(String[] args)
-    void render() {
-        try {
-            initGLFWindow();
-            renderLoop();
-            glfwDestroyWindow(window);
-            keyCallback.free();
-            fbCallback.free();
-        } finally {
-            glfwTerminate();
-            glfwSetErrorCallback(null).free();
-        }
+    void render(CHWindowManager myWindowManager) {
+        myWindowManager.updateContextToThis();
+        renderLoop(myWindowManager);
+        myWindowManager.destroyGlfwWindow();
     } // void render()
-    private void initGLFWindow() {
-        glfwSetErrorCallback(errorCallback =
-                GLFWErrorCallback.createPrint(System.err));
-        if (!glfwInit())
-            throw new IllegalStateException("Unable to initialize GLFW");
-        glfwDefaultWindowHints();
-        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
-        glfwWindowHint(GLFW_SAMPLES, 8);
-        window = glfwCreateWindow(WIN_WIDTH, WIN_HEIGHT, "CSC 133", NULL, NULL);
-        if (window == NULL)
-            throw new RuntimeException("Failed to create the GLFW window");
-        glfwSetKeyCallback(window, keyCallback = new GLFWKeyCallback() {
-            @Override
-            public void invoke(long window, int key, int scancode, int action, int
-                    mods) {
-                if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-                    glfwSetWindowShouldClose(window, true);
-            }
-        });
-        glfwSetFramebufferSizeCallback(window, fbCallback = new
-                GLFWFramebufferSizeCallback() {
-                    @Override
-                    public void invoke(long window, int w, int h) {
-                        if (w > 0 && h > 0) {
-                            WIN_WIDTH = w;
-                            WIN_HEIGHT = h;
-                        }
-                    }
-                });
-        GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-        glfwSetWindowPos(window, WIN_POS_X, WIN_POX_Y);
-        glfwMakeContextCurrent(window);
-        int VSYNC_INTERVAL = 1;
-        glfwSwapInterval(VSYNC_INTERVAL);
-        glfwShowWindow(window);
-    } // private void initGLFWindow()
-    void renderLoop() {
+    void renderLoop(CHWindowManager myWindowManager) {
         glfwPollEvents();
         initOpenGL();
-        renderObjects();
+        renderObjects(myWindowManager);
         /* Process window messages in the main thread */
-        while (!glfwWindowShouldClose(window)) {
+        while (!myWindowManager.isGlfwWindowClosed()) {
             glfwWaitEvents();
         }
     } // void renderLoop()
@@ -109,7 +62,7 @@ public class Driver {
         glShaderSource(fs,
                 "uniform vec3 color;" +
                         "void main(void) {" +
-                        " gl_FragColor = vec4(0.7f, 0.5f, 0.1f, 1.0f);" +
+                        " gl_FragColor = vec4(0.6f, 0.7f, 0.1f, 1.0f);" +
                         "}");
         glCompileShader(fs);
         glAttachShader(shader_program, fs);
@@ -118,8 +71,8 @@ public class Driver {
         vpMatLocation = glGetUniformLocation(shader_program, "viewProjMatrix");
         return;
     } // void initOpenGL()
-    void renderObjects() {
-        while (!glfwWindowShouldClose(window)) {
+    void renderObjects(CHWindowManager myWM) {
+        while (!myWM.isGlfwWindowClosed()) {
             glfwPollEvents();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             int vbo = glGenBuffers();
@@ -141,9 +94,9 @@ public class Driver {
                     viewProjMatrix.get(myFloatBuffer));
             glUniform3f(renderColorLocation, 1.0f, 0.498f, 0.153f);
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            int VTD = 6; // need to process 6 Vertices To Draw 2 triangles
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0L);
-            glfwSwapBuffers(window);
+            final int VTD = 6; // need to process 6 Vertices To Draw 2 triangles
+            glDrawElements(GL_TRIANGLES, VTD, GL_UNSIGNED_INT, 0L);
+            myWM.swapBuffers();
         }
     } // renderObjects
-}
+} // public class Driver
