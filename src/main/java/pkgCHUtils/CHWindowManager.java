@@ -31,11 +31,11 @@ public class CHWindowManager {
 
     public static void get(int width, int height) {}
 
-    public CHWindowManager get() {
+    public static CHWindowManager get() {
         if (my_window == null) {
             new CHWindowManager();
         }
-        return this;
+        return my_window;
     }
 
     public void updateContextToThis() {}
@@ -52,6 +52,11 @@ public class CHWindowManager {
 
     public int[] getWindowSize() {
         return new int[] { win_height, win_width };
+    }
+
+    public boolean isGlfWindowClosed() {
+
+        return false;
     }
 
 
