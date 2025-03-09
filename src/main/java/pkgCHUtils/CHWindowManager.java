@@ -208,7 +208,6 @@ public class CHWindowManager {
     }
 
     public boolean isGlfwWindowClosed() {
-        // TODO: This may be incorrect
         return glfwWindowShouldClose(glfwWindow);
     }
 
