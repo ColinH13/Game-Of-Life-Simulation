@@ -22,10 +22,7 @@ public class CHDriver {
     FloatBuffer myFloatBuffer = BufferUtils.createFloatBuffer(OGL_MATRIX_SIZE);
     int vpMatLocation = 0, renderColorLocation = 0;
     public static void main(String[] args) {
-        System.out.println("Hello World!");
         CHWindowManager myWM = CHWindowManager.get(WIN_WIDTH, WIN_HEIGHT, WIN_POS_X, WIN_POX_Y);
-        //TODO: Remove:
-        System.out.println("First get");
         myWM = CHWindowManager.get();
         myWM = CHWindowManager.get(2*WIN_WIDTH, 2*WIN_HEIGHT, WIN_POS_X,
                 WIN_POX_Y);

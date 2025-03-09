@@ -45,7 +45,6 @@ public class CHWindowManager {
         GL.createCapabilities();
         glfwSwapInterval(1);
         //glfwShowWindow(glfwWindow);
-        System.out.println("Got to end of constructor");
     }
 
     private CHWindowManager(int width, int height) {
@@ -62,7 +61,6 @@ public class CHWindowManager {
         GL.createCapabilities();
         glfwSwapInterval(1);
         //glfwShowWindow(glfwWindow);
-        System.out.println("Got to end of constructor");
     }
 
     private CHWindowManager(int width, int height, int pos_x, int pos_y) {
@@ -79,31 +77,20 @@ public class CHWindowManager {
         GL.createCapabilities();
         glfwSwapInterval(1);
         //glfwShowWindow(glfwWindow);
-        System.out.println("Got to end of constructor");
     }
 
     public static CHWindowManager get() {
         if (my_window == null) {
             my_window = new CHWindowManager();
         }
-        System.out.println("Got to return statement");
         return my_window;
     }
 
     public static CHWindowManager get(int width, int height, int orgX, int orgY) {
-        // Provided code
-        System.out.println("Started get() statement");
         if (my_window == null) {
             my_window = new CHWindowManager(width, height, orgX, orgY);
         }
-        System.out.println("Got to return statement");
         return my_window;
-        // TODO: May need to update to singleton
-        /*
-        if (my_window == null) {
-            my_window = new CHWindowManager(width, height, pos_x, pos_y);
-        }
-        return my_window;*/
 
     }  //  public SlWindowManager get(...)
 
@@ -111,9 +98,8 @@ public class CHWindowManager {
         if (my_window == null) {
             my_window = new CHWindowManager(width, height);
         }
-        System.out.println("Got to return statement");
         return my_window;
-    }
+    } // public CHWindowManager get(...)
 
 
 
@@ -135,11 +121,7 @@ public class CHWindowManager {
         this.win_width = width;
         this.win_height = height;
 
-        // TODO: This may be incorrect
-
-        destroyGlfwWindow();
-
-
+        //destroyGlfwWindow();
     }
 
     public void enableResizeWindowCallback() {
@@ -229,9 +211,5 @@ public class CHWindowManager {
         // TODO: This may be incorrect
         return glfwWindowShouldClose(glfwWindow);
     }
-
-
-
-
 
 }
