@@ -12,7 +12,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
-public class Driver {
+public class CHDriver {
     //long window;
     static int WIN_WIDTH = 1800, WIN_HEIGHT = 1200, WIN_POS_X = 30, WIN_POX_Y = 90;
     private static final int OGL_MATRIX_SIZE = 16;
@@ -22,12 +22,14 @@ public class Driver {
     FloatBuffer myFloatBuffer = BufferUtils.createFloatBuffer(OGL_MATRIX_SIZE);
     int vpMatLocation = 0, renderColorLocation = 0;
     public static void main(String[] args) {
-        CHWindowManager myWM = CHWindowManager.get(WIN_WIDTH, WIN_HEIGHT,
-                WIN_POS_X, WIN_POX_Y);
+        System.out.println("Hello World!");
+        CHWindowManager myWM = CHWindowManager.get(WIN_WIDTH, WIN_HEIGHT, WIN_POS_X, WIN_POX_Y);
+        //TODO: Remove:
+        System.out.println("First get");
         myWM = CHWindowManager.get();
         myWM = CHWindowManager.get(2*WIN_WIDTH, 2*WIN_HEIGHT, WIN_POS_X,
                 WIN_POX_Y);
-        new Driver().render(myWM);
+        new CHDriver().render(myWM);
     } // public static void main(String[] args)
     void render(CHWindowManager myWindowManager) {
         myWindowManager.updateContextToThis();
