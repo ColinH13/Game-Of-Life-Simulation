@@ -2,7 +2,7 @@
 package pkgCHCSC133;
 import pkgCHRenderEngine.CHRenderer;
 import pkgCHUtils.CHWindowManager;
-public class Driver {
+public class CHDriver {
     public static void main(String[] args) {
         final int numRows = 6, numCols = 7, polyLength = 50, polyOffset = 10,
                 polyPadding = 20;

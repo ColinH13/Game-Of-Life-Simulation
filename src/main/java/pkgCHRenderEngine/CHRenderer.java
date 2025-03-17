@@ -1,20 +1,23 @@
 package pkgCHRenderEngine;
 
 import pkgCHUtils.CHWindowManager;
-
 import org.joml.Matrix4f;
-
 import java.nio.FloatBuffer;
+
+import org.lwjgl.BufferUtils;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL20.*;
+import java.nio.IntBuffer;
 
 public class CHRenderer {
 
     private int shader_program;
     private int NUM_COLS;
-    private Matrix4f viewProjMatrix;
+    private Matrix4f viewProjMatrix = new Matrix4f();
     private static int VPT;
     private int[] winWidthHeight;
     private final int OGL_MATRIX_SIZE = 16;
-    private FloatBuffer myFloatBuffer;
+    private FloatBuffer myFloatBuffer = BufferUtils.createFloatBuffer(OGL_MATRIX_SIZE);
     private int NUM_ROWS;
     private int PADDING;
     private int EPT;
@@ -25,7 +28,7 @@ public class CHRenderer {
     private int vpMatLocation;
     private int renderColorLocation;
 
-    CHRenderer(CHWindowManager windowManager) {
+    public CHRenderer(CHWindowManager windowManager) {
         myWM = windowManager;
     }
 
@@ -41,7 +44,7 @@ public class CHRenderer {
         return new int[0];
     }
 
-    public void render(int var1, int var2, int var3, int var4, int var5) {}
+    public void render(final int offset, final int padding, final int size, final int numRows, final int numCols) {}
 
     private void renderLoop() {}
 
