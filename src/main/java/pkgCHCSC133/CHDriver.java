@@ -1,6 +1,6 @@
 
 package pkgCHCSC133;
-import pkgCHRenderEngine.SlRenderer;
+import pkgCHRenderEngine.CHRenderer;
 import pkgCHUtils.CHWindowManager;
 public class Driver {
     public static void main(String[] args) {
