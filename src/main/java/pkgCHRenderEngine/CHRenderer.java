@@ -11,25 +11,26 @@ public class CHRenderer {
     private int shader_program;
     private int NUM_COLS;
     private Matrix4f viewProjMatrix;
-    private static int VPT;
+    private final int VPT = 4;
     private int[] winWidthHeight;
     private final int OGL_MATRIX_SIZE = 16;
     private FloatBuffer myFloatBuffer;
     private int NUM_ROWS;
     private int PADDING;
-    private int EPT;
+    private int EPT = 6;
     private int SIZE;
     private CHWindowManager myWM;
     private int OFFSET;
-    private static int FPV;
+    private final int FPV = 2;
     private int vpMatLocation;
     private int renderColorLocation;
 
-    CHRenderer(CHWindowManager windowManager) {
+    public CHRenderer(CHWindowManager windowManager) {
         myWM = windowManager;
     }
 
-    private float[] generateTileVertices(int x, int y) {
+    private float[] generateTileVertices(final int rowTiles,
+                                         final int columnTiles) {
         return new float[0];
     }
 
@@ -37,7 +38,9 @@ public class CHRenderer {
 
     private void renderObjects() {}
 
-    private int[] generateTileIndices(int x, int y) {
+    private int[] generateTileIndices(final int rows, final int cols) {
+
+
         return new int[0];
     }
 
