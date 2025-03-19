@@ -31,7 +31,19 @@ public class CHRenderer {
 
     private float[] generateTileVertices(final int rowTiles,
                                          final int columnTiles) {
-        return new float[0];
+
+        // VPT = 4; // Vertices per tile
+        // FPV = 2; // Number of floats (coordinates) per tile
+        int myIndx = (rowTiles * NUM_COLS + columnTiles) * VPT * FPV;
+        int xmin = OFFSET + columnTiles * (SIZE + PADDING);
+        int ymin = winWidthHeight[1] - (OFFSET + SIZE + columnTiles * (SIZE + PADDING));
+
+        // Vertices of (columnTiles, rowTiles):
+        // (xmin, ymin), (xmin+SIZE, ymin), (xmin+SIZE, ymin-SIZE), (xmin, ymin-SIZE)
+
+        float[] myVertices = {xmin, ymin, xmin+SIZE, ymin, xmin+SIZE, ymin-SIZE, xmin, ymin-SIZE};
+
+        return myVertices;
     }
 
     private void initOpenGL() {}
