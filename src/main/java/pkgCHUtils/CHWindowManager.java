@@ -129,41 +129,11 @@ public class CHWindowManager {
     }
 
     public void swapBuffers() {
-
-        while (!glfwWindowShouldClose(glfwWindow)) {
-            glfwPollEvents();
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            int vbo = glGenBuffers();
-            int ibo = glGenBuffers();
-            float[] vertices = {-20f, -20f, 20f, -20f, 20f, 20f, -20f, 20f};
-            int[] indices = {0, 1, 2, 0, 2, 3};
-            glBindBuffer(GL_ARRAY_BUFFER, vbo);
-            glBufferData(GL_ARRAY_BUFFER, (FloatBuffer) BufferUtils.
-                    createFloatBuffer(vertices.length).
-                    put(vertices).flip(), GL_STATIC_DRAW);
-            glEnableClientState(GL_VERTEX_ARRAY);
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, (IntBuffer) BufferUtils.
-                    createIntBuffer(indices.length).
-                    put(indices).flip(), GL_STATIC_DRAW);
-            glVertexPointer(2, GL_FLOAT, 0, 0L);
-            /*
-            viewProjMatrix.setOrtho(-100, 100, -100, 100, 0, 10);
-            glUniformMatrix4fv(vpMatLocation, false,
-                    viewProjMatrix.get(myFloatBuffer));
-            glUniform3f(renderColorLocation, 1.0f, 0.498f, 0.153f);
-            */
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            int VTD = 6; // need to process 6 Vertices To Draw 2 triangles
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0L);
-
-            glfwSwapBuffers(glfwWindow);
-        }
+        glfwSwapBuffers(glfwWindow);
     }
 
     private void initGlfwWindow() {
-        /*glfwSetErrorCallback(errorCallback =
-                GLFWErrorCallback.createPrint(System.err));*/
+
         if (!glfwInit()) throw new IllegalStateException("Unable to initialize GLFW");
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
@@ -172,26 +142,6 @@ public class CHWindowManager {
         glfwWindow = glfwCreateWindow(win_width, win_height, "CSC 133", NULL, NULL);
         if (glfwWindow == NULL)
             throw new RuntimeException("Failed to create the GLFW window");
-        /*
-        glfwSetKeyCallback(glfwWindow, keyCallback = new GLFWKeyCallback() {
-            @Override
-            public void invoke(long window, int key, int scancode, int action, int
-                    mods) {
-                if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-                    glfwSetWindowShouldClose(window, true);
-            }
-        });
-        glfwSetFramebufferSizeCallback(glfwWindow, fbCallback = new
-                GLFWFramebufferSizeCallback() {
-                    @Override
-                    public void invoke(long window, int w, int h) {
-                        if (w > 0 && h > 0) {
-                            win_width = w;
-                            win_height = h;
-                        }
-                    }
-                });
-         */
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
         glfwSetWindowPos(glfwWindow, 0, 0);

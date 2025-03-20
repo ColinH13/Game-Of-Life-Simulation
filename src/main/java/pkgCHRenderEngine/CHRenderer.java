@@ -85,7 +85,7 @@ public class CHRenderer {
     }
 
     void initOpenGL() {
-        GL.createCapabilities();
+        //GL.createCapabilities();
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
         glViewport(0, 0, winWidthHeight[0], winWidthHeight[1]);
@@ -116,13 +116,17 @@ public class CHRenderer {
     // Perhaps modify to use for loop instead of while loop,
     // or put for loop inside while loop and break when complete
     private void renderObjects() {
+        // Generate buffers only ONCE
         int vbo = glGenBuffers();
         int ibo = glGenBuffers();
+
+
 
         float[] vertices = generateTileVertices(NUM_ROWS, NUM_COLS);
         int[] indices = generateTileIndices(NUM_ROWS, NUM_COLS);
         FloatBuffer myFloatBuffer = BufferUtils.createFloatBuffer(OGL_MATRIX_SIZE);
 
+        // Upload Vertex Data
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glBufferData(GL_ARRAY_BUFFER, (FloatBuffer) BufferUtils
                 .createFloatBuffer(vertices.length)
@@ -130,22 +134,27 @@ public class CHRenderer {
         glEnableClientState(GL_VERTEX_ARRAY);
         glVertexPointer(2, GL_FLOAT, 0, 0L);
 
+        // Upload Index Data
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, (IntBuffer) BufferUtils
                 .createIntBuffer(indices.length)
                 .put(indices).flip(), GL_STATIC_DRAW);
 
+        // Main Loop
         while (!myWM.isGlfwWindowClosed()) {
             glfwPollEvents();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+            // Update window size & set orthographic projection
             winWidthHeight = myWM.getWindowSize();
             viewProjMatrix.setOrtho(0, winWidthHeight[0], 0, winWidthHeight[1], 0, 10);
             glUniformMatrix4fv(vpMatLocation, false, viewProjMatrix.get(myFloatBuffer));
 
+            // Set Render Color
             glUniform3f(renderColorLocation, 1.0f, 0.498f, 0.153f);
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+            // Draw all squares using the correct number of indices
             glDrawElements(GL_TRIANGLES, indices.length, GL_UNSIGNED_INT, 0L);
 
             myWM.swapBuffers();
