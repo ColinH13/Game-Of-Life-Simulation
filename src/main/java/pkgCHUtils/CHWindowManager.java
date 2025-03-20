@@ -204,7 +204,7 @@ public class CHWindowManager {
     }
 
     public int[] getWindowSize() {
-        return new int[] { win_height, win_width };
+        return new int[] { win_width, win_height };
     }
 
     public boolean isGlfwWindowClosed() {
