@@ -41,7 +41,19 @@ public class CHRenderer {
         // Vertices of (columnTiles, rowTiles):
         // (xmin, ymin), (xmin+SIZE, ymin), (xmin+SIZE, ymin-SIZE), (xmin, ymin-SIZE)
 
-        float[] myVertices = {xmin, ymin, xmin+SIZE, ymin, xmin+SIZE, ymin-SIZE, xmin, ymin-SIZE};
+        float[] myVertices = new float[rowTiles * columnTiles * FPV * VPT];
+
+        myVertices[myIndx] = xmin;
+        myVertices[myIndx + 1] = ymin;
+
+        myVertices[myIndx + 2] = xmin+SIZE;
+        myVertices[myIndx + 3] = ymin;
+
+        myVertices[myIndx + 4] = xmin+SIZE;
+        myVertices[myIndx + 5] = ymin+SIZE;
+
+        myVertices[myIndx + 6] = xmin;
+        myVertices[myIndx + 7] = ymin+SIZE;
 
         return myVertices;
     }
@@ -51,9 +63,26 @@ public class CHRenderer {
     private void renderObjects() {}
 
     private int[] generateTileIndices(final int rows, final int cols) {
+        int IPV = 6;// Indices Per Tile
+        // VPT = 4 // Vertices Per Tile
 
+        int tileNum = rows * NUM_COLS + cols;
+        int startIndex = tileNum * IPV;
+        int startIV = tileNum * VPT;
 
-        return new int[0];
+        // (rows, cols) indices are as follows:
+        //(startIV, startIV+1, startIV+2, startIV, startIV+2, startIV+3)
+
+        int[] myIndices = new int[NUM_ROWS * NUM_COLS * IPV];
+
+        myIndices[startIndex] = startIV;
+        myIndices[startIndex + 1] = startIV + 1;
+        myIndices[startIndex + 2] = startIV + 2;
+        myIndices[startIndex + 3] = startIV;
+        myIndices[startIndex + 4] = startIV + 2;
+        myIndices[startIndex + 5] = startIV + 3;
+
+        return myIndices;
     }
 
     public void render(int var1, int var2, int var3, int var4, int var5) {}
