@@ -14,12 +14,26 @@ public class CHGeometryManager {
 
 
     protected CHGeometryManager(int maxRows, int maxCols, int offset, int size, int
-            padding, int[] winWidthHeight) {}
+            padding, int[] winWidthHeight) {
+
+        NUM_COLS = maxCols;
+        NUM_ROWS = maxRows;
+        TOTAL_ROWS = NUM_ROWS * NUM_COLS;
+        SIZE = size;
+        OFFSET = offset;
+        WinWidthHeight = winWidthHeight;
+        PADDING = padding;
+
+        myPPArray = new CHPingPongArray(NUM_ROWS, NUM_COLS, 0, 1);
+    }
 
     protected float[] generateTilesVertices(final int rowTiles, final int columnTiles) {return new float[0];}
 
     protected boolean fillArrayWithTileVertices(float[] vertices, int startIndex, float
-            xmin, float ymin) {return false;}
+            xmin, float ymin) {
+
+
+        return false;}
 
     protected int[] generateTileIndices(final int totalTiles) {return new int[0];}
 
