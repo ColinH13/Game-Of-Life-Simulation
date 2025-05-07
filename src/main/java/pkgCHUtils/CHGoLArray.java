@@ -17,15 +17,87 @@ public class CHGoLArray extends CHPingPongArrayLive{
     }
 
     public CHGoLArray(int numRows, int numCols, int numAlive) {
-
+        super(numRows, numCols, numAlive);
 
     }
 
-    public void onTickUpdate() {}
+    // implement logic for determining whether a cell becomes alive or dead next
+    public void onTickUpdate() {
+        // iterate over liveArray, depending on nearest neighbors in liveArray:
+        // set corresponding index of nextArray to LIVE or DEAD.
 
-    public void readFromFile(String fileName) {}
+        // 1. Live Neighbors < 2 --> Kill
+        // 2. Live Neighbors == 2 || Live Neighbors == 3 --> Retain
+        // 3. Live Neighbors > 3 --> Kill
+        // 4. Dead with Live Neighbors == 3 --> Alive again
 
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
+                int liveNeighborsCount = numLiveNeighbors(getNearestNeighborsArray(row, col));
+                // Doesn't check for alive or dead, just looks at the value
+                if (isAlive(row, col)) {
+                    if (liveNeighborsCount < 2 || liveNeighborsCount > 3) {
+                        kill(row, col);
+                    } // else if 2 or 3, retain (do nothing)
+                    }
+                else if (isDead(row, col) && liveNeighborsCount == 3) {
+                    revive(row, col);
+                }
+            }
+        }
+    }
 
-    public int getLiveCellCount() {return liveCellCount;}
+    private boolean isAlive(final int row, final int col) {
+        if (getVal(row, col) == LIVE) {
+            return true;
+        }
+        else {return false;}
+    }
+
+    private boolean isDead(final int row, final int col) {
+        if (getVal(row, col) == DEAD) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void kill(int row, int col) {
+        set(row, col, DEAD);
+    }
+
+    private void revive(int row, int col) {
+        set(row, col, LIVE);
+    }
+
+    // returns the number of live degree one neighbors given the array of nearest neighbors
+    protected int numLiveNeighbors(RCPair[] nearestNeighborsArray) {
+        int liveNeighbors = 0;
+        for (int i = 0; i < nearestNeighborsArray.length; i++) {
+            int row = nearestNeighborsArray[i].row();
+            int col = nearestNeighborsArray[i].col();
+            if (liveArray[row][col] == LIVE) {
+                liveNeighbors++;
+            }
+        }
+        return liveNeighbors;
+    }
+
+    // simply reuses save() method from CHPingPongArray
+    public void readFromFile(String fileName) {
+        loadFile(fileName);
+    }
+
+    public int getLiveCellCount() {
+        liveCellCount = 0;
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
+                if (nextArray[row][col] == LIVE) {
+                    liveCellCount++;
+                }
+            }
+        }
+        return liveCellCount;
+    }
 
 }
