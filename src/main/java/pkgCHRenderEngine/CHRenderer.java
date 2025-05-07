@@ -2,6 +2,7 @@ package pkgCHRenderEngine;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
+import pkgCHUtils.CHGeometryManager;
 import pkgCHUtils.CHWindowManager;
 
 import org.joml.Matrix4f;
@@ -34,10 +35,20 @@ public class CHRenderer {
     private int vpMatLocation;
     private int renderColorLocation;
 
+    CHGeometryManager geometryManager;
+
     public CHRenderer(CHWindowManager windowManager) {
         myWM = windowManager;
         winWidthHeight = myWM.getWindowSize();
     }
+
+    public CHRenderer(CHWindowManager windowManager, CHGeometryManager geometryManager) {
+        myWM = windowManager;
+        winWidthHeight = myWM.getWindowSize();
+        this.geometryManager = geometryManager;
+    }
+
+
 
     private float[] generateTileVertices(final int rowTiles, final int columnTiles) {
         // VPT = 4; // Vertices per tile
