@@ -223,7 +223,7 @@ public class CHRenderer {
 
         // Initialize geometry manager
         // TODO: ensure rows and columns are being received correctly
-        geometryManager = new CHGeometryManager(goLArray.getRows(), goLArray.getCols(), OFFSET, SIZE, PADDING, winWidthHeight);
+        geometryManager = new CHGeometryManager(goLArray.getNumRows(), goLArray.getNumCols(), OFFSET, SIZE, PADDING, winWidthHeight);
     }
 
     private void renderLoop() {
