@@ -3,6 +3,7 @@ package pkgCHRenderEngine;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
 import pkgCHUtils.CHGeometryManager;
+import pkgCHUtils.CHGoLArray;
 import pkgCHUtils.CHWindowManager;
 
 import org.joml.Matrix4f;
@@ -21,7 +22,7 @@ public class CHRenderer {
     private int shader_program;
     private int NUM_COLS;
     private Matrix4f viewProjMatrix = new Matrix4f();
-    private final int VPT = 4;
+    private final int VPT = 4; // TODO: Move to GeometryManager
     private int[] winWidthHeight;
     private final int OGL_MATRIX_SIZE = 16;
     private FloatBuffer myFloatBuffer;
@@ -31,25 +32,28 @@ public class CHRenderer {
     private int SIZE;
     private CHWindowManager myWM;
     private int OFFSET;
-    private final int FPV = 2;
+    private final int FPV = 2; // TODO: Move to GeometryManager
     private int vpMatLocation;
     private int renderColorLocation;
 
+
     CHGeometryManager geometryManager;
+    CHGoLArray goLArray;
 
     public CHRenderer(CHWindowManager windowManager) {
         myWM = windowManager;
         winWidthHeight = myWM.getWindowSize();
     }
 
-    public CHRenderer(CHWindowManager windowManager, CHGeometryManager geometryManager) {
+    public CHRenderer(CHWindowManager windowManager, CHGoLArray goLArray) {
         myWM = windowManager;
         winWidthHeight = myWM.getWindowSize();
-        this.geometryManager = geometryManager;
+
+        this.goLArray = goLArray;
     }
 
-
-
+    // TODO: Remove, moved you CHGeometryManager class
+    /*
     private float[] generateTileVertices(final int rowTiles, final int columnTiles) {
         // VPT = 4; // Vertices per tile
         // FPV = 2; // Number of floats (coordinates) per tile
@@ -66,10 +70,10 @@ public class CHRenderer {
                 int ymin = winWidthHeight[1] - (OFFSET + SIZE + row * (SIZE + PADDING));
                 //int ymin = OFFSET + row * (SIZE + PADDING);
 
-                /*System.out.println("myVertices Size: " + myVertices.length);
+                System.out.println("myVertices Size: " + myVertices.length);
                 for (int i = 0; i < myVertices.length; i++) {
                     System.out.println("myVertices[" + i + "]: " + myVertices[i]);
-                }*/
+                }
 
                 // Vertices of (columnTiles, rowTiles):
                 // (xmin, ymin), (xmin+SIZE, ymin), (xmin+SIZE, ymin-SIZE), (xmin, ymin-SIZE)
@@ -94,6 +98,7 @@ public class CHRenderer {
 
         return myVertices;
     }
+    */
 
     void initOpenGL() {
         //GL.createCapabilities();
@@ -133,8 +138,8 @@ public class CHRenderer {
 
 
 
-        float[] vertices = generateTileVertices(NUM_ROWS, NUM_COLS);
-        int[] indices = generateTileIndices(NUM_ROWS, NUM_COLS);
+        float[] vertices = geometryManager.generateTileVertices(NUM_ROWS, NUM_COLS);
+        int[] indices = geometryManager.generateTileIndices(NUM_ROWS, NUM_COLS);
         FloatBuffer myFloatBuffer = BufferUtils.createFloatBuffer(OGL_MATRIX_SIZE);
 
         // Upload Vertex Data
@@ -173,6 +178,8 @@ public class CHRenderer {
         }
     }
 
+    // TODO: Remove, moved to CHGeometryManager
+    /*
     private int[] generateTileIndices(final int rows, final int cols) {
         final int IPV = 6;  // Indices Per Tile (6 for 2 triangles)
         final int VPT = 4;  // Vertices Per Tile (4 for a square)
@@ -196,7 +203,7 @@ public class CHRenderer {
             }
         }
         return myIndices;
-    }
+    } */
 
 
     public void render(final int offset, final int padding,
@@ -213,10 +220,13 @@ public class CHRenderer {
         myFloatBuffer = BufferUtils.createFloatBuffer(OGL_MATRIX_SIZE);
         renderLoop();
         //myWM.destroyGlfwWindow();
+
+        // Initialize geometry manager
+        // TODO: ensure rows and columns are being received correctly
+        geometryManager = new CHGeometryManager(goLArray.getRows(), goLArray.getCols(), OFFSET, SIZE, PADDING, winWidthHeight);
     }
 
     private void renderLoop() {
-
         glfwPollEvents();
         initOpenGL();
         //renderObjects();
