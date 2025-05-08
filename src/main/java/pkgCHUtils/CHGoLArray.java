@@ -1,27 +1,28 @@
 package pkgCHUtils;
 
+// TODO: May need to extend CHPingPongArray instead of the Live version
 public class CHGoLArray extends CHPingPongArrayLive{
 
     public int liveCellCount;
-    private int numLiveCells = 0; // default to 0
+    private int numLiveCells;
 
     public CHGoLArray(final String myDataFile) {
         super(16, 16, 0);
 
-        // read from file
+        // read from file, filling in the
         readFromFile(myDataFile);
     }
 
+    // TODO: Change number of live cells in constructor
     public CHGoLArray(final int rows, final int cols) {
-        super(rows, cols, 0);
+        super(rows, cols, 5);
     }
 
     public CHGoLArray(int numRows, int numCols, int numAlive) {
         super(numRows, numCols, numAlive);
-
     }
 
-    // implement logic for determining whether a cell becomes alive or dead next
+    // Logic for determining whether each cell becomes alive or dead in the next update, or "tick"
     public void onTickUpdate() {
         // iterate over liveArray, depending on nearest neighbors in liveArray:
         // set corresponding index of nextArray to LIVE or DEAD.
