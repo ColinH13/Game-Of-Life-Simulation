@@ -1,55 +1,133 @@
 package pkgCHUtils;
 
+import java.util.Random;
+
 // TODO: May need to extend CHPingPongArray instead of the Live version
-public class CHGoLArray extends CHPingPongArrayLive{
+public class CHGoLArray extends CHPingPongArray{
 
     public int liveCellCount;
     private int numLiveCells;
+    public final int DEAD = 0;
+    public final int LIVE = 1;
 
     public CHGoLArray(final String myDataFile) {
-        super(5, 5, 0);
+        super(0, 0, 0, 1);
 
         // read from file, filling in the
         readFromFile(myDataFile);
     }
 
-    // TODO: Change number of live cells in constructor
-    public CHGoLArray(final int rows, final int cols) {
-        super(rows, cols, 18);
-    }
-
     public CHGoLArray(int numRows, int numCols, int numAlive) {
-        super(numRows, numCols, numAlive);
+        super(numRows, numCols, 0, 1);
+
+        /*
+        // Below code is to initialize the nextArray
+        // Initialize array with DEAD (0)
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                nextArray[i][j] = DEAD;
+            }
+        }
+
+        // Create random array to assist in randomizing the nextArray
+        int arraySize = numRows * numCols;
+        int[] randomizeArray = new int[arraySize];
+
+        for (int i = 0; i < arraySize; i++) {
+            randomizeArray[i] = i;
+        }
+
+        // Randomize via FYK Algorithm
+        Random rand = new Random();
+        // TODO: test implementation for decrementing, then compare to incrementing values.
+        for (int i = 1; i < arraySize; i++) {
+            int j = rand.nextInt(i + 1);
+            // Swap elements at i and j
+            int temp = randomizeArray[i];
+            randomizeArray[i] = randomizeArray[j];
+            randomizeArray[j] = temp;
+        }
+
+        // Take the first n = numLiveCells elements, and fill in the corresponding indices of the nextArray
+        for (int i = 0; i < numLiveCells; i++) {
+            int index = randomizeArray[i];
+            int row = index / numCols;
+            int col = index % numCols;
+            nextArray[row][col] = LIVE;
+        }
+         */
+        this.numLiveCells = numLiveCells;
+
+        // Below code is to initialize the nextArray
+        // Initialize array with DEAD (0)
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                nextArray[i][j] = DEAD;
+            }
+        }
+
+        // Create random array to assist in randomizing the nextArray
+        int arraySize = numRows * numCols;
+        int[] randomizeArray = new int[arraySize];
+
+        for (int i = 0; i < arraySize; i++) {
+            randomizeArray[i] = i;
+        }
+
+        // Randomize via FYK Algorithm
+        Random rand = new Random();
+        // TODO: test implementation for decrementing, then compare to incrementing values.
+        for (int i = 1; i < arraySize; i++) {
+            int j = rand.nextInt(i + 1);
+            // Swap elements at i and j
+            int temp = randomizeArray[i];
+            randomizeArray[i] = randomizeArray[j];
+            randomizeArray[j] = temp;
+        }
+
+        // Take the first n = numLiveCells elements, and fill in the corresponding indices of the nextArray
+        for (int i = 0; i < numLiveCells; i++) {
+            int index = randomizeArray[i];
+            int row = index / numCols;
+            int col = index % numCols;
+            nextArray[row][col] = LIVE;
+        }
     }
 
     // Logic for determining whether each cell becomes alive or dead in the next update, or "tick"
     public void onTickUpdate() {
-        //this.swapLiveAndNext();
-        // iterate over liveArray, depending on nearest neighbors in liveArray:
-        // set corresponding index of nextArray to LIVE or DEAD.
+        //clearNextArray();
 
-        // 1. Live Neighbors < 2 --> Kill
-        // 2. Live Neighbors == 2 || Live Neighbors == 3 --> Retain
-        // 3. Live Neighbors > 3 --> Kill
-        // 4. Dead with Live Neighbors == 3 --> Alive again
 
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++) {
-                int liveNeighborsCount = numLiveNeighbors(getNearestNeighborsArray(row, col));
-                // Doesn't check for alive or dead, just looks at the value
-                if (isAlive(row, col)) {
-                    if (liveNeighborsCount < 2 || liveNeighborsCount > 3) {
+                int liveNeighbors = numLiveNeighbors(getNearestNeighborsArray(row, col));
+
+                if (liveArray[row][col] == LIVE) {
+                    if (liveNeighbors < 2 || liveNeighbors > 3) {
                         kill(row, col);
-                    } // else if 2 or 3, retain (do nothing)
+                    } else {
+                        // Retain — copy current cell to nextArray
+                        nextArray[row][col] = LIVE;
                     }
-                else if (isDead(row, col) && liveNeighborsCount == 3) {
+                } else if (liveArray[row][col] == DEAD && liveNeighbors == 3) {
                     revive(row, col);
                 }
             }
         }
-        //System.out.println("liveCellCount: " + liveCellCount());
-        this.swapLiveAndNext();
+
+        swapLiveAndNext();
     }
+
+
+    private void clearNextArray() {
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
+                nextArray[row][col] = /*liveArray[row][col]*/ LIVE;
+            }
+        }
+    }
+
 
     public boolean isAlive(final int row, final int col) {
         if (getVal(row, col) == LIVE) {
@@ -98,7 +176,7 @@ public class CHGoLArray extends CHPingPongArrayLive{
         liveCellCount = 0;
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++) {
-                if (nextArray[row][col] == LIVE) {
+                if (liveArray[row][col] == LIVE) {
                     liveCellCount++;
                 }
             }

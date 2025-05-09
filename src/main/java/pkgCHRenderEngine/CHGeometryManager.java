@@ -47,19 +47,19 @@ public class CHGeometryManager {
 
         for (int row = 0; row < rowTiles; row++) {
             for (int col = 0; col < columnTiles; col++) {
-                    System.out.println("golArray is Alive. vertex generated.");
-                    int myIndx = (row * columnTiles + col) * VPT * FPV;
-                    int xmin = OFFSET + col * (SIZE + PADDING);
-                    int ymin = winWidthHeight[1] - (OFFSET + SIZE + row * (SIZE + PADDING));
+                System.out.println("golArray is Alive. vertex generated.");
+                int myIndx = (row * columnTiles + col) * VPT * FPV;
+                int xmin = OFFSET + col * (SIZE + PADDING);
+                int ymin = winWidthHeight[1] - (OFFSET + SIZE + row * (SIZE + PADDING));
 
-                    // replaced previous code with new method
+                // replaced previous code with new method
 
-                    boolean result = fillArrayWithTileVertices(myVertices, myIndx, xmin, ymin);
+                boolean result = fillArrayWithTileVertices(myVertices, myIndx, xmin, ymin);
 
-                    if (!result) {
-                        System.out.println("Error: fillArrayWithTileVertices failed");
-                        System.exit(0);
-                    }
+                if (!result) {
+                    System.out.println("Error: fillArrayWithTileVertices failed");
+                    System.exit(0);
+                }
             }
         }
 
@@ -111,18 +111,18 @@ public class CHGeometryManager {
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
 
-                    int tileNum = row * cols + col;
-                    int startIndex = tileNum * IPV;
-                    int startIV = tileNum * VPT;
+                int tileNum = row * cols + col;
+                int startIndex = tileNum * IPV;
+                int startIV = tileNum * VPT;
 
-                    // Two triangles forming a square
-                    myIndices[startIndex] = startIV;
-                    myIndices[startIndex + 1] = startIV + 1;
-                    myIndices[startIndex + 2] = startIV + 2;
+                // Two triangles forming a square
+                myIndices[startIndex] = startIV;
+                myIndices[startIndex + 1] = startIV + 1;
+                myIndices[startIndex + 2] = startIV + 2;
 
-                    myIndices[startIndex + 3] = startIV;
-                    myIndices[startIndex + 4] = startIV + 2;
-                    myIndices[startIndex + 5] = startIV + 3;
+                myIndices[startIndex + 3] = startIV;
+                myIndices[startIndex + 4] = startIV + 2;
+                myIndices[startIndex + 5] = startIV + 3;
             }
         }
         return myIndices;

@@ -64,9 +64,10 @@ public class CHPingPongArray {
         /*
         for (int row = 0; row < numRows; ++row) {
             for (int col = 0; col < numCols; ++col) {
-                nextArray[row][col] = rand.nextInt(randMin, randMax);
+                nextArray[row][col] = 0;
             }
         }*/
+
         initArrays();
     } // CHPingPongArray(...)
 
@@ -148,6 +149,7 @@ public class CHPingPongArray {
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++) {
                 nextArray[row][col] = DEFAULT_VALUE;
+                liveArray[row][col] = DEFAULT_VALUE;
             }
         }
     }
@@ -166,7 +168,6 @@ public class CHPingPongArray {
                     .toArray();
             numRows = rowCol[0]; numCols = rowCol[1];
 
-            //TODO: implement initArrays()
             initArrays();
 
             int curRow = 0, rowLength = 0;
@@ -206,9 +207,7 @@ public class CHPingPongArray {
         nextArray[row][col] = newValue;
     } // set(...)
 
-    public void setCell(int row, int col, int newValue) {
-        set(row, col, newValue);
-    } // setCell(...)
+
 
     // Should update the nextArray to the sum of the nearest neighbor elements in the liveArray
     public void updateToNNSum() {
@@ -250,8 +249,8 @@ public class CHPingPongArray {
 
     public void swapLiveAndNext() {
         int[][] temp = liveArray;
-        liveArray = nextArray;
-        int[][] nextArray = temp;
+        liveArray = nextArray.clone();
+        int[][] nextArray = temp.clone();
         //nextArray = temp;
     } // swapLiveAndNext()
 
@@ -271,4 +270,3 @@ public class CHPingPongArray {
     }
 
 }
-

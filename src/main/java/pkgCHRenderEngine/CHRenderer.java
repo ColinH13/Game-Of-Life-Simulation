@@ -34,7 +34,7 @@ public class CHRenderer {
     private int vpMatLocation;
     private int renderColorLocation;
 
-    private final int SLEEP_INTERVAL = 400; // milliseconds
+    private final int SLEEP_INTERVAL = 1; // milliseconds
 
 
     CHGeometryManager geometryManager;
@@ -66,6 +66,7 @@ public class CHRenderer {
                         "void main(void) {" +
                         " gl_Position = viewProjMatrix * gl_Vertex;" +
                         "}");
+
         glCompileShader(vs);
         glAttachShader(shader_program, vs);
         int fs = glCreateShader(GL_FRAGMENT_SHADER);
@@ -96,16 +97,12 @@ public class CHRenderer {
             int ibo = glGenBuffers();
             float[] vertices;
             int[] indices;
-            if (golArray != null) {
+
                 int maxVertices = NUM_ROWS * NUM_COLS * VPT * FPV;
                 vertices = new float[maxVertices];
                 geometryManager.generateTilesVertices(golArray, vertices);
                 int liveCells = golArray.liveCellCount();
                 indices = geometryManager.generateTileIndices(liveCells);
-            } else {
-                vertices = geometryManager.generateTileVertices(NUM_ROWS, NUM_COLS);
-                indices = geometryManager.generateTileIndices(NUM_ROWS * NUM_COLS);
-            }
             glBindBuffer(GL_ARRAY_BUFFER, vbo);
             glBufferData(GL_ARRAY_BUFFER, (FloatBuffer) BufferUtils.
                     createFloatBuffer(vertices.length).
@@ -125,13 +122,14 @@ public class CHRenderer {
 
             glDrawElements(GL_TRIANGLES, indices.length, GL_UNSIGNED_INT, 0L);
             myWM.swapBuffers();
+
             try {
                 Thread.sleep(SLEEP_INTERVAL);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            glDeleteBuffers(vbo);
-            glDeleteBuffers(ibo);
+            //glDeleteBuffers(vbo);
+            //glDeleteBuffers(ibo);
         }
     }
 

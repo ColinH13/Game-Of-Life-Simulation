@@ -8,7 +8,7 @@ public class CHPingPongArrayLive extends CHPingPongArray {
     public final int LIVE = 1;
     int numLiveCells = 0;
 
-     public CHPingPongArrayLive(int numRows, int numCols, int numLiveCells) {
+    public CHPingPongArrayLive(int numRows, int numCols, int numLiveCells) {
         super(numRows, numCols, 0, 1);
         this.numLiveCells = numLiveCells;
 
@@ -29,7 +29,7 @@ public class CHPingPongArrayLive extends CHPingPongArray {
         }
 
         // Randomize via FYK Algorithm
-         Random rand = new Random();
+        Random rand = new Random();
         // TODO: test implementation for decrementing, then compare to incrementing values.
         for (int i = 1; i < arraySize; i++) {
             int j = rand.nextInt(i + 1);
@@ -40,12 +40,12 @@ public class CHPingPongArrayLive extends CHPingPongArray {
         }
 
         // Take the first n = numLiveCells elements, and fill in the corresponding indices of the nextArray
-         for (int i = 0; i < numLiveCells; i++) {
-             int index = randomizeArray[i];
-             int row = index / numCols;
-             int col = index % numCols;
-             nextArray[row][col] = LIVE;
-         }
+        for (int i = 0; i < numLiveCells; i++) {
+            int index = randomizeArray[i];
+            int row = index / numCols;
+            int col = index % numCols;
+            nextArray[row][col] = LIVE;
+        }
 
     }
 
@@ -116,6 +116,6 @@ public class CHPingPongArrayLive extends CHPingPongArray {
     }
 
     public int getValue(int row, int col) {
-         return super.getVal(row, col);
+        return super.getVal(row, col);
     }
 }
