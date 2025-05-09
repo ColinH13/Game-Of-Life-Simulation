@@ -2,54 +2,49 @@
 package pkgCHCSC133;
 import pkgCHRenderEngine.CHRenderer;
 import pkgCHUtils.CHGoLArray;
+import pkgCHUtils.CHPingPongArray;
 import pkgCHUtils.CHWindowManager;
 
 public class CHDriver {
     public static void main(String[] args) {
-        boolean isTest = true;
 
-        // Run OLD Driver as test to verify output
-        if (isTest) {
-            final int numRows = 6, numCols = 7, polyLength = 50, polyOffset = 10,
+            // initialize primitive variables
+            // TODO: Modify to 100x100 default
+            int numRows = 17, numCols = 17, polyLength = 50, polyOffset = 10,
                     polyPadding = 20;
+
+
+            // Create GoLArray object
+            CHGoLArray goLArray;
+            if (args.length != 1) {
+                    goLArray = new CHGoLArray(numRows, numCols, (int)(numRows * numCols * 0.2f+0.5));
+            }
+            else {
+                    // TODO: modify to take file input
+                    goLArray = new CHGoLArray(args[0]);
+
+                    numRows = goLArray.getNumCols();
+                    numCols = goLArray.getNumRows();
+            }
+
             final int winWidth = (polyLength + polyPadding) * numCols + 2 * polyOffset;
+            System.out.println("Win Width: " + winWidth);
+
             final int winHeight = (polyLength + polyPadding) * numRows + 2 *
                     polyOffset;
             final int winOrgX = 50, winOrgY = 80;
+
+            // Create WindowManager object
             final CHWindowManager myWM = CHWindowManager.get(winWidth, winHeight,
                     winOrgX, winOrgY);
-            final CHRenderer myRenderer = new CHRenderer(myWM);
+
+            // Create Renderer object with rendering parameters and GoLArray object as parameter
+            final CHRenderer myRenderer = new CHRenderer(myWM, goLArray);
+
+            // Send message to WindowManager to update the OpenGL Rendering Context to the Driver object
+            myWM.updateContextToThis();
+
             myRenderer.render(polyOffset, polyPadding, polyLength, numRows, numCols);
-            System.exit(0);
-        }
-
-        // New Driver starts here
-
-
-        final int numRows = 6, numCols = 7, polyLength = 50, polyOffset = 10,
-                polyPadding = 20;
-        final int winWidth = (polyLength + polyPadding) * numCols + 2 * polyOffset;
-        final int winHeight = (polyLength + polyPadding) * numRows + 2 *
-                polyOffset;
-        final int winOrgX = 50, winOrgY = 80;
-
-        // Create WindowManager object
-        final CHWindowManager myWM = CHWindowManager.get(winWidth, winHeight,
-                winOrgX, winOrgY);
-
-        // Create GoLArray object
-        CHGoLArray goLArray = new CHGoLArray(numRows, numCols);
-
-
-        // Create Renderer object with rendering parameters and GoLArray object as parameter
-        final CHRenderer myRenderer = new CHRenderer(myWM, goLArray);
-
-        // Send message to WindowManager to update the OpenGL Rendering Context to the Driver object
-
-
-        // Modify the driver to take the new constructor to GoLArray that takes a filename
-        // and creates a GoLArray from it
-
 
 
     } // public static void main(String[] args)

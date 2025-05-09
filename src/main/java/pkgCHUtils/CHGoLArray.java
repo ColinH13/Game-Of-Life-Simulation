@@ -7,7 +7,7 @@ public class CHGoLArray extends CHPingPongArrayLive{
     private int numLiveCells;
 
     public CHGoLArray(final String myDataFile) {
-        super(16, 16, 0);
+        super(5, 5, 0);
 
         // read from file, filling in the
         readFromFile(myDataFile);
@@ -15,7 +15,7 @@ public class CHGoLArray extends CHPingPongArrayLive{
 
     // TODO: Change number of live cells in constructor
     public CHGoLArray(final int rows, final int cols) {
-        super(rows, cols, 5);
+        super(rows, cols, 18);
     }
 
     public CHGoLArray(int numRows, int numCols, int numAlive) {
@@ -24,6 +24,7 @@ public class CHGoLArray extends CHPingPongArrayLive{
 
     // Logic for determining whether each cell becomes alive or dead in the next update, or "tick"
     public void onTickUpdate() {
+        //this.swapLiveAndNext();
         // iterate over liveArray, depending on nearest neighbors in liveArray:
         // set corresponding index of nextArray to LIVE or DEAD.
 
@@ -46,16 +47,18 @@ public class CHGoLArray extends CHPingPongArrayLive{
                 }
             }
         }
+        //System.out.println("liveCellCount: " + liveCellCount());
+        this.swapLiveAndNext();
     }
 
-    private boolean isAlive(final int row, final int col) {
+    public boolean isAlive(final int row, final int col) {
         if (getVal(row, col) == LIVE) {
             return true;
         }
         else {return false;}
     }
 
-    private boolean isDead(final int row, final int col) {
+    public boolean isDead(final int row, final int col) {
         if (getVal(row, col) == DEAD) {
             return true;
         } else {
@@ -74,6 +77,7 @@ public class CHGoLArray extends CHPingPongArrayLive{
     // returns the number of live degree one neighbors given the array of nearest neighbors
     protected int numLiveNeighbors(RCPair[] nearestNeighborsArray) {
         int liveNeighbors = 0;
+        //System.out.println("nearestNeighborsArray length = " + nearestNeighborsArray.length);
         for (int i = 0; i < nearestNeighborsArray.length; i++) {
             int row = nearestNeighborsArray[i].row();
             int col = nearestNeighborsArray[i].col();
@@ -81,6 +85,7 @@ public class CHGoLArray extends CHPingPongArrayLive{
                 liveNeighbors++;
             }
         }
+        //System.out.println("liveNeighbors = " + liveNeighbors);
         return liveNeighbors;
     }
 
@@ -89,7 +94,7 @@ public class CHGoLArray extends CHPingPongArrayLive{
         loadFile(fileName);
     }
 
-    public int getLiveCellCount() {
+    public int liveCellCount() {
         liveCellCount = 0;
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++) {
@@ -99,6 +104,33 @@ public class CHGoLArray extends CHPingPongArrayLive{
             }
         }
         return liveCellCount;
+    }
+
+    public void printLiveCells() {
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
+                if (nextArray[row][col] == LIVE) {
+                    //System.out.println("Alive Row: " + row + ", Col: " + col);
+                }
+            }
+        }
+    }
+
+    public void printNextArraySize() {
+        System.out.println(nextArray.length);
+    }
+    public void printLiveArraySize() {
+        System.out.println(liveArray.length);
+    }
+    public void printNextArray() {
+        System.out.println("Next Array:");
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
+                System.out.print(nextArray[row][col] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
     }
 
 }

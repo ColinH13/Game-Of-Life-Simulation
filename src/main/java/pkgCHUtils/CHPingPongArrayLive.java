@@ -14,7 +14,7 @@ public class CHPingPongArrayLive extends CHPingPongArray {
 
         // Below code is to initialize the nextArray
         // Initialize array with DEAD (0)
-        for (int i = 0; i < numLiveCells; i++) {
+        for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
                 nextArray[i][j] = DEAD;
             }
@@ -49,39 +49,15 @@ public class CHPingPongArrayLive extends CHPingPongArray {
 
     }
 
-    // TODO: Created method, must now verify implementation
     public int countLiveDegreeTwoNeighbors(int row, int col) {
-
         int numLiveD2Numbers = 0;
 
-        // TODO: Decide between two implementations
-
-
-
-        // TODO: Implement code to check number of live degree 2 numbers
         int prevRow = (row - 2 + numRows) % numRows;
         int nextRow = (row + 2) % numRows;
         int prevCol = (col - 2 + numCols) % numCols;
         int nextCol = (col + 2) % numCols;
 
         int[] neighbors = new int[16];
-        /*
-        neighbors[0] = liveArray[prevRow][prevCol];
-        neighbors[1] = liveArray[prevRow][prevCol + 1];
-        neighbors[2] = liveArray[prevRow][col];
-        neighbors[3] = liveArray[prevRow][col + 1];
-        neighbors[4] = liveArray;
-        neighbors[5] = ;
-        neighbors[6] = ;
-        neighbors[7] = ;
-        neighbors[8] = ;
-        neighbors[9] = ;
-        neighbors[10] = ;
-        neighbors[11] = ;
-        neighbors[12] = ;
-        neighbors[13] = ;
-        neighbors[14] = ;
-        neighbors[15] =;*/
 
         neighbors[0]  = liveArray[(prevRow - 2 + numRows) % numRows][(prevCol - 2 + numCols) % numCols];
         neighbors[1]  = liveArray[(prevRow - 2 + numRows) % numRows][(prevCol - 1 + numCols) % numCols];
@@ -104,16 +80,12 @@ public class CHPingPongArrayLive extends CHPingPongArray {
         neighbors[14] = liveArray[(prevRow + 2 + numRows) % numRows][(prevCol + 1 + numCols) % numCols];
         neighbors[15] = liveArray[(prevRow + 2 + numRows) % numRows][(prevCol + 2 + numCols) % numCols];
 
-
-
         // Iterate over neighbors array, increment numLiveD2Numbers if the element is 1, or alive.
         for (int i = 0; i < neighbors.length; i++) {
             if (neighbors[i] == LIVE) {
                 numLiveD2Numbers++;
             }
         }
-
-
 
         // TODO: Remove test print statements
         /*
@@ -146,8 +118,4 @@ public class CHPingPongArrayLive extends CHPingPongArray {
     public int getValue(int row, int col) {
          return super.getVal(row, col);
     }
-
-
-
-
 }

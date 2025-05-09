@@ -1,8 +1,6 @@
 package pkgCHRenderEngine;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL;
-import pkgCHUtils.CHGeometryManager;
 import pkgCHUtils.CHGoLArray;
 import pkgCHUtils.CHWindowManager;
 
@@ -36,69 +34,24 @@ public class CHRenderer {
     private int vpMatLocation;
     private int renderColorLocation;
 
+    private final int SLEEP_INTERVAL = 400; // milliseconds
+
 
     CHGeometryManager geometryManager;
-    CHGoLArray goLArray;
+    CHGoLArray golArray;
 
     public CHRenderer(CHWindowManager windowManager) {
         myWM = windowManager;
         winWidthHeight = myWM.getWindowSize();
     }
 
-    public CHRenderer(CHWindowManager windowManager, CHGoLArray goLArray) {
+    public CHRenderer(CHWindowManager windowManager, CHGoLArray golArray) {
         myWM = windowManager;
         winWidthHeight = myWM.getWindowSize();
 
-        this.goLArray = goLArray;
+        this.golArray = golArray;
     }
 
-    // TODO: Remove, moved you CHGeometryManager class
-    /*
-    private float[] generateTileVertices(final int rowTiles, final int columnTiles) {
-        // VPT = 4; // Vertices per tile
-        // FPV = 2; // Number of floats (coordinates) per tile
-
-        //TODO: Change back from testing
-        float[] myVertices = new float[rowTiles * columnTiles * FPV * VPT];
-        //float[] myVertices = new float[(rowTiles + 1) * (columnTiles + 1) * 2];
-
-        for (int row = 0; row < rowTiles; row++) {
-            for (int col = 0; col < columnTiles; col++) {
-
-                int myIndx = (row * columnTiles + col) * VPT * FPV;
-                int xmin = OFFSET + col * (SIZE + PADDING);
-                int ymin = winWidthHeight[1] - (OFFSET + SIZE + row * (SIZE + PADDING));
-                //int ymin = OFFSET + row * (SIZE + PADDING);
-
-                System.out.println("myVertices Size: " + myVertices.length);
-                for (int i = 0; i < myVertices.length; i++) {
-                    System.out.println("myVertices[" + i + "]: " + myVertices[i]);
-                }
-
-                // Vertices of (columnTiles, rowTiles):
-                // (xmin, ymin), (xmin+SIZE, ymin), (xmin+SIZE, ymin-SIZE), (xmin, ymin-SIZE)
-                myVertices[myIndx] = xmin;
-                myVertices[myIndx + 1] = ymin;
-
-                myVertices[myIndx + 2] = xmin + SIZE;
-                myVertices[myIndx + 3] = ymin;
-
-                myVertices[myIndx + 4] = xmin + SIZE;
-                myVertices[myIndx + 5] = ymin + SIZE;
-
-                myVertices[myIndx + 6] = xmin;
-                myVertices[myIndx + 7] = ymin + SIZE;
-            }
-        }
-
-        System.out.println("myVertices Size: " + myVertices.length);
-        for (int i = 0; i < myVertices.length; i++) {
-            System.out.println("myVertices[" + i + "]: " + myVertices[i]);
-        }
-
-        return myVertices;
-    }
-    */
 
     void initOpenGL() {
         //GL.createCapabilities();
@@ -131,79 +84,57 @@ public class CHRenderer {
 
     // Perhaps modify to use for loop instead of while loop,
     // or put for loop inside while loop and break when complete
+    // TODO: Modify renderObjects to use
     private void renderObjects() {
-        // Generate buffers only ONCE
-        int vbo = glGenBuffers();
-        int ibo = glGenBuffers();
-
-
-
-        float[] vertices = geometryManager.generateTileVertices(NUM_ROWS, NUM_COLS);
-        int[] indices = geometryManager.generateTileIndices(NUM_ROWS, NUM_COLS);
-        FloatBuffer myFloatBuffer = BufferUtils.createFloatBuffer(OGL_MATRIX_SIZE);
-
-        // Upload Vertex Data
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, (FloatBuffer) BufferUtils
-                .createFloatBuffer(vertices.length)
-                .put(vertices).flip(), GL_STATIC_DRAW);
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glVertexPointer(2, GL_FLOAT, 0, 0L);
-
-        // Upload Index Data
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, (IntBuffer) BufferUtils
-                .createIntBuffer(indices.length)
-                .put(indices).flip(), GL_STATIC_DRAW);
-
-        // Main Loop
         while (!myWM.isGlfwWindowClosed()) {
             glfwPollEvents();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-            // Update window size & set orthographic projection
-            winWidthHeight = myWM.getWindowSize();
-            viewProjMatrix.setOrtho(0, winWidthHeight[0], 0, winWidthHeight[1], 0, 10);
-            glUniformMatrix4fv(vpMatLocation, false, viewProjMatrix.get(myFloatBuffer));
-
-            // Set Render Color
-            glUniform3f(renderColorLocation, 1.0f, 0.498f, 0.153f);
+            if (golArray != null) {
+                golArray.onTickUpdate();
+            }
+            int vbo = glGenBuffers();
+            int ibo = glGenBuffers();
+            float[] vertices;
+            int[] indices;
+            if (golArray != null) {
+                int maxVertices = NUM_ROWS * NUM_COLS * VPT * FPV;
+                vertices = new float[maxVertices];
+                geometryManager.generateTilesVertices(golArray, vertices);
+                int liveCells = golArray.liveCellCount();
+                indices = geometryManager.generateTileIndices(liveCells);
+            } else {
+                vertices = geometryManager.generateTileVertices(NUM_ROWS, NUM_COLS);
+                indices = geometryManager.generateTileIndices(NUM_ROWS * NUM_COLS);
+            }
+            glBindBuffer(GL_ARRAY_BUFFER, vbo);
+            glBufferData(GL_ARRAY_BUFFER, (FloatBuffer) BufferUtils.
+                    createFloatBuffer(vertices.length).
+                    put(vertices).flip(), GL_STATIC_DRAW);
+            glEnableClientState(GL_VERTEX_ARRAY);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, (IntBuffer) BufferUtils.
+                    createIntBuffer(indices.length).
+                    put(indices).flip(), GL_STATIC_DRAW);
+            glVertexPointer(2, GL_FLOAT, 0, 0L);
+            int[] size = myWM.getWindowSize();
+            viewProjMatrix.setOrtho(0, size[0], 0, size[1], 0, 10);
+            glUniformMatrix4fv(vpMatLocation, false,
+                    viewProjMatrix.get(myFloatBuffer));
+            glUniform3f(renderColorLocation, 1.0f, 0.5f, 0.0f);
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-            // Draw all squares using the correct number of indices
             glDrawElements(GL_TRIANGLES, indices.length, GL_UNSIGNED_INT, 0L);
-
             myWM.swapBuffers();
-            glDisableVertexAttribArray(0);
+            try {
+                Thread.sleep(SLEEP_INTERVAL);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            glDeleteBuffers(vbo);
+            glDeleteBuffers(ibo);
         }
     }
 
-    // TODO: Remove, moved to CHGeometryManager
-    /*
-    private int[] generateTileIndices(final int rows, final int cols) {
-        final int IPV = 6;  // Indices Per Tile (6 for 2 triangles)
-        final int VPT = 4;  // Vertices Per Tile (4 for a square)
-
-        int[] myIndices = new int[rows * cols * EPT];
-
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-                int tileNum = row * cols + col;
-                int startIndex = tileNum * IPV;
-                int startIV = tileNum * VPT;
-
-                // Two triangles forming a square
-                myIndices[startIndex] = startIV;
-                myIndices[startIndex + 1] = startIV + 1;
-                myIndices[startIndex + 2] = startIV + 2;
-
-                myIndices[startIndex + 3] = startIV;
-                myIndices[startIndex + 4] = startIV + 2;
-                myIndices[startIndex + 5] = startIV + 3;
-            }
-        }
-        return myIndices;
-    } */
 
 
     public void render(final int offset, final int padding,
@@ -215,21 +146,24 @@ public class CHRenderer {
         SIZE = size;
         PADDING = padding;
 
+        NUM_ROWS = golArray.getNumRows();
+        NUM_COLS = golArray.getNumCols();
 
+        // Initialize geometry manager
+
+        geometryManager = new CHGeometryManager(NUM_ROWS, NUM_COLS, OFFSET, SIZE, PADDING, winWidthHeight);
+
+        // TODO: I believe I need to update the context from within the driver
         //myWM.updateContextToThis();
+
         myFloatBuffer = BufferUtils.createFloatBuffer(OGL_MATRIX_SIZE);
         renderLoop();
         //myWM.destroyGlfwWindow();
-
-        // Initialize geometry manager
-        // TODO: ensure rows and columns are being received correctly
-        geometryManager = new CHGeometryManager(goLArray.getNumRows(), goLArray.getNumCols(), OFFSET, SIZE, PADDING, winWidthHeight);
     }
 
     private void renderLoop() {
         glfwPollEvents();
         initOpenGL();
-        //renderObjects();
         /* Process window messages in the main thread */
         while (!myWM.isGlfwWindowClosed()) {
             renderObjects();

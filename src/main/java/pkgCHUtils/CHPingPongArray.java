@@ -93,14 +93,13 @@ public class CHPingPongArray {
         int size = numRows * numCols;
         int[] randArray = new int[size];
 
-        for (int row = 0; row < numRows; row++) {
-            for (int col = 0; col < numCols; col++) {
-                randArray[row * numCols + col] = liveArray[row][col];
-            }
+        for (int i = 0; i < size; i++) {
+            randArray[i] = liveArray[i / numCols][i % numCols];
         }
 
         randomizeArray(randArray);
-    } // randomize()
+    }
+
     public void randomizeViaFisherYatesKnuth() {
         randomize();
     } // randomizeViaFisherYatesKnuth()
@@ -143,14 +142,16 @@ public class CHPingPongArray {
     } // save()
 
     private void initArrays() {
+        liveArray = new int[numRows][numCols]; // Add this to reset liveArray as well.
+        nextArray = new int[numRows][numCols];
+        System.out.println(numRows + " " + numCols);
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++) {
                 nextArray[row][col] = DEFAULT_VALUE;
             }
         }
-
-
     }
+
 
     public boolean loadFile(String dataFilePath) {
         boolean retVal = true;
@@ -250,7 +251,8 @@ public class CHPingPongArray {
     public void swapLiveAndNext() {
         int[][] temp = liveArray;
         liveArray = nextArray;
-        nextArray = temp;
+        int[][] nextArray = temp;
+        //nextArray = temp;
     } // swapLiveAndNext()
 
     public int getNumRows() {

@@ -161,4 +161,8 @@ public class CHWindowManager {
         return glfwWindowShouldClose(glfwWindow);
     }
 
+    public void setWidth(int width) {
+        this.win_width = width;
+    }
+
 }
