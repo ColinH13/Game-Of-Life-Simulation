@@ -20,79 +20,43 @@ public class CHGoLArray extends CHPingPongArray{
     public CHGoLArray(int numRows, int numCols, int numAlive) {
         super(numRows, numCols, 0, 1);
 
-        /*
-        // Below code is to initialize the nextArray
-        // Initialize array with DEAD (0)
+        this.numLiveCells = numAlive;
+
+        // Initialize nextArray with DEAD (0)
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
                 nextArray[i][j] = DEAD;
             }
         }
 
-        // Create random array to assist in randomizing the nextArray
+        // Create array to randomize cell positions
         int arraySize = numRows * numCols;
         int[] randomizeArray = new int[arraySize];
-
         for (int i = 0; i < arraySize; i++) {
             randomizeArray[i] = i;
         }
 
-        // Randomize via FYK Algorithm
+        // Shuffle using Fisher-Yates-Knuth (FYK) algorithm
         Random rand = new Random();
-        // TODO: test implementation for decrementing, then compare to incrementing values.
         for (int i = 1; i < arraySize; i++) {
             int j = rand.nextInt(i + 1);
-            // Swap elements at i and j
             int temp = randomizeArray[i];
             randomizeArray[i] = randomizeArray[j];
             randomizeArray[j] = temp;
         }
 
-        // Take the first n = numLiveCells elements, and fill in the corresponding indices of the nextArray
+        // Activate first `numLiveCells` cells in nextArray
         for (int i = 0; i < numLiveCells; i++) {
             int index = randomizeArray[i];
             int row = index / numCols;
             int col = index % numCols;
             nextArray[row][col] = LIVE;
         }
-         */
-        this.numLiveCells = numLiveCells;
 
-        // Below code is to initialize the nextArray
-        // Initialize array with DEAD (0)
-        for (int i = 0; i < numRows; i++) {
-            for (int j = 0; j < numCols; j++) {
-                nextArray[i][j] = DEAD;
-            }
-        }
-
-        // Create random array to assist in randomizing the nextArray
-        int arraySize = numRows * numCols;
-        int[] randomizeArray = new int[arraySize];
-
-        for (int i = 0; i < arraySize; i++) {
-            randomizeArray[i] = i;
-        }
-
-        // Randomize via FYK Algorithm
-        Random rand = new Random();
-        // TODO: test implementation for decrementing, then compare to incrementing values.
-        for (int i = 1; i < arraySize; i++) {
-            int j = rand.nextInt(i + 1);
-            // Swap elements at i and j
-            int temp = randomizeArray[i];
-            randomizeArray[i] = randomizeArray[j];
-            randomizeArray[j] = temp;
-        }
-
-        // Take the first n = numLiveCells elements, and fill in the corresponding indices of the nextArray
-        for (int i = 0; i < numLiveCells; i++) {
-            int index = randomizeArray[i];
-            int row = index / numCols;
-            int col = index % numCols;
-            nextArray[row][col] = LIVE;
-        }
+        // Copy nextArray into liveArray so it renders correctly on first draw
+        swapLiveAndNext();
     }
+
 
     // Logic for determining whether each cell becomes alive or dead in the next update, or "tick"
     public void onTickUpdate() {
