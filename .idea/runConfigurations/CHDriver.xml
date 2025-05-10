@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="CHDriver" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="pkgCHCSC133.CHDriver" />
-    <module name="CHAssignment-3.main" />
+    <module name="CHAssignment-9.main" />
     <option name="PROGRAM_PARAMETERS" value="gol_input_1.txt" />
     <method v="2">
       <option name="Make" enabled="true" />
