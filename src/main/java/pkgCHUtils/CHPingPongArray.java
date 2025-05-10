@@ -145,7 +145,7 @@ public class CHPingPongArray {
     private void initArrays() {
         liveArray = new int[numRows][numCols]; // Add this to reset liveArray as well.
         nextArray = new int[numRows][numCols];
-        System.out.println(numRows + " " + numCols);
+        //System.out.println(numRows + " " + numCols);
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++) {
                 nextArray[row][col] = DEFAULT_VALUE;
@@ -193,15 +193,35 @@ public class CHPingPongArray {
 
 
     // TODO: May need to modify to return new array having iterated over liveArray
-    public int[][] getArray() {return liveArray.clone();}
+    public int[][] getArray() {
+        int[][] array = new int[numRows][numCols];
 
-    public void copyToNextArray() {
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
+                array[row][col] = liveArray[row][col];
+            }
+        }
+        return array;
+    }
+
+    public void copyLiveToNextArray() {
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++) {
                 nextArray[row][col] = liveArray[row][col]; // Copy value
             }
         }
-    } // copyToNextArray()
+    } // copyLiveToNextArray()
+
+    public void copyNextToLiveArray() {
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
+                liveArray[row][col] = nextArray[row][col]; // Copy value
+            }
+        }
+    } // copyNextToLiveArray()
+
+
+
 
     public void set(int row, int col, int newValue) {
         nextArray[row][col] = newValue;
@@ -248,10 +268,28 @@ public class CHPingPongArray {
     } // printArray()
 
     public void swapLiveAndNext() {
+        int[][] temp = new int[numRows][numCols];
+
+        // make temp = liveArray
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
+                temp[row][col] = liveArray[row][col];
+            }
+        }
+        // make the live array equal the next array
+        copyNextToLiveArray();
+
+        // make the nextArray equal temp, which was the previous state of the liveArray
+        int[][] nextArray = temp;
+
+        /*
+
         int[][] temp = liveArray;
+
         liveArray = nextArray.clone();
-        int[][] nextArray = temp.clone();
-        //nextArray = temp;
+        int[][] nextArray = temp.clone();*/
+
+
     } // swapLiveAndNext()
 
     public int getNumRows() {

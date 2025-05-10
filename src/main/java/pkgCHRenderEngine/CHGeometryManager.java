@@ -107,7 +107,6 @@ public class CHGeometryManager {
         //final int VPT = Vertices Per Tile (4 for a square)
 
         int[] myIndices = new int[rows * cols * EPT];
-
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
 

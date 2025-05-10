@@ -175,4 +175,15 @@ public class CHGoLArray extends CHPingPongArray{
         System.out.println();
     }
 
+    public boolean liveArrayEquals(int[][] array) {
+        boolean equals = true;
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
+                // return false if there is a cell that isn't equal
+                if (array[row][col] != liveArray[row][col]) {return false;}
+            }
+        }
+        // Only reaches this if all cells are found to be equal
+        return equals;
+    }
 }

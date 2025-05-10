@@ -34,7 +34,7 @@ public class CHRenderer {
     private int vpMatLocation;
     private int renderColorLocation;
 
-    private final int SLEEP_INTERVAL = 1; // milliseconds
+    private final int SLEEP_INTERVAL = 400; // milliseconds
 
 
     CHGeometryManager geometryManager;
@@ -93,16 +93,16 @@ public class CHRenderer {
             if (golArray != null) {
                 golArray.onTickUpdate();
             }
+
             int vbo = glGenBuffers();
             int ibo = glGenBuffers();
             float[] vertices;
             int[] indices;
-
                 int maxVertices = NUM_ROWS * NUM_COLS * VPT * FPV;
                 vertices = new float[maxVertices];
                 geometryManager.generateTilesVertices(golArray, vertices);
                 int liveCells = golArray.liveCellCount();
-                indices = geometryManager.generateTileIndices(liveCells);
+                indices = geometryManager.generateTileIndices(NUM_ROWS, NUM_COLS);
             glBindBuffer(GL_ARRAY_BUFFER, vbo);
             glBufferData(GL_ARRAY_BUFFER, (FloatBuffer) BufferUtils.
                     createFloatBuffer(vertices.length).
