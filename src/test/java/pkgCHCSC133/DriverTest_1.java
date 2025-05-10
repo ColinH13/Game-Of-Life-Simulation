@@ -21,7 +21,7 @@ class DriverTest_1 {
     private static boolean ULT_3_DEBUG = false;
     private static boolean ULT_0_DEBUG = true;
 
-    private static boolean VISUAL_TEST = false;
+    private static boolean VISUAL_TEST = true;
 
     public static void main(String[] args) {
         // Old ULTs from previous assignment
