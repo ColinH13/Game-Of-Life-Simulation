@@ -21,7 +21,7 @@ class DriverTest_1 {
     private static boolean ULT_3_DEBUG = false;
     private static boolean ULT_0_DEBUG = true;
 
-    private static boolean VISUAL_TEST = true;
+    private static boolean VISUAL_TEST = false;
 
     public static void main(String[] args) {
         // Old ULTs from previous assignment
@@ -33,8 +33,8 @@ class DriverTest_1 {
 
         // New ULTs
         //ult_0();
-        ult_1();
-        //ult_3();
+        //ult_1();
+        ult_3();
 
 
         if (VISUAL_TEST) {
@@ -54,21 +54,27 @@ class DriverTest_1 {
         // initialize three arrays to compare, one for the empty array, then the following two for the
         // two states the array will oscillate through based on the input file.
         int[][] emptyState = {
-                {0, 0, 0},
-                {0, 0, 0},
-                {0, 0, 0}
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0}
         };
 
         int[][] initialState = {
-                {0, 1, 0},
-                {0, 1, 0},
-                {0, 1, 0}
+                {0, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0},
+                {0, 0, 1, 0, 0},
+                {0, 0, 1, 0, 0},
+                {0, 0, 0, 0, 0}
         };
 
         int[][] nextState = {
-                {0, 0, 0},
-                {1, 1, 1},
-                {0, 0, 0}
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0},
+                {0, 1, 1, 1, 0},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0}
         };
 
         // TODO: Move test prints to debug block
