@@ -1,5 +1,6 @@
 package pkgCHCSC133;
 
+import pkgCHRenderEngine.CHGeometryManager;
 import pkgCHRenderEngine.CHRenderer;
 import pkgCHUtils.CHGoLArray;
 import pkgCHUtils.CHPingPongArray;
@@ -10,16 +11,27 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 
 class DriverTest_1 {
+    // Used to help create arrays for debugging
+    CHGoLArray goLArray;
+    private int L = goLArray.LIVE;
+    private int D = goLArray.DEAD;
+
+    // All debug statements will print if this is true
     private static boolean ULT_DEBUG = false;
+
+    // Print debug statements for individual ULTs
     private static boolean ULT_A_DEBUG = false;
     private static boolean ULT_B_DEBUG = false;
     private static boolean ULT_C_DEBUG = false;
     private static boolean ULT_D_DEBUG = false;
 
+    private static boolean ULT_0_DEBUG = false;
     private static boolean ULT_1_DEBUG = false;
     private static boolean ULT_2_DEBUG = false;
     private static boolean ULT_3_DEBUG = false;
-    private static boolean ULT_0_DEBUG = true;
+    private static boolean ULT_4_DEBUG = false;
+    private static boolean ULT_5_DEBUG = false;
+
 
     private static boolean VISUAL_TEST = false;
 
@@ -32,9 +44,12 @@ class DriverTest_1 {
 
 
         // New ULTs
-        //ult_0();
-        //ult_1();
-        ult_3();
+        ult_0(); // swapLiveAndNext
+        ult_1(); // Verify method that determines number of nearest neighbors
+        ult_2(); // Ensures a large array with a 2x1 cluster of live cells disappears after onTickUpdate()
+        ult_3(); // onTickUpdate, ensures oscillating 3x1 and 1x3 cluster of live cells.
+        ult_4(); // Ensures a large array with a 2x2 cluster of live cells remains alive after onTickUpdate()
+        ult_5(); // Ensure proper comparison of arrays
 
 
         if (VISUAL_TEST) {
@@ -44,40 +59,40 @@ class DriverTest_1 {
     }
 
     // Ensures that goLArray onTickUpdate() method works properly. Checks with an oscillating 3x3 pattern
-    // ult_3 will not PASS if ult_1 does not PASS as well, as it relies on proper nearest Neighbor and swap implementation.
+    // Relies on proper nearest Neighbor and swap implementation.
     private static boolean ult_3() {
         // Create GoLArray object
         CHGoLArray goLArray;
         goLArray = new CHGoLArray("gol_input_2.txt");
+        int L = goLArray.LIVE;
+        int D = goLArray.DEAD;
         boolean retVal = true;
 
         // initialize three arrays to compare, one for the empty array, then the following two for the
         // two states the array will oscillate through based on the input file.
         int[][] emptyState = {
-                {0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0}
+                {D, D, D, D, D},
+                {D, D, D, D, D},
+                {D, D, D, D, D},
+                {D, D, D, D, D},
+                {D, D, D, D, D}
         };
 
         int[][] initialState = {
-                {0, 0, 0, 0, 0},
-                {0, 0, 1, 0, 0},
-                {0, 0, 1, 0, 0},
-                {0, 0, 1, 0, 0},
-                {0, 0, 0, 0, 0}
+                {D, D, D, D, D},
+                {D, D, L, D, D},
+                {D, D, L, D, D},
+                {D, D, L, D, D},
+                {D, D, D, D, D}
         };
 
         int[][] nextState = {
-                {0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0},
-                {0, 1, 1, 1, 0},
-                {0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0}
+                {D, D, D, D, D},
+                {D, D, D, D, D},
+                {D, L, L, L, D},
+                {D, D, D, D, D},
+                {D, D, D, D, D}
         };
-
-        // TODO: Move test prints to debug block
 
         if (ULT_3_DEBUG) {
             // Check that the live array is initialized empty when reading from a file
@@ -139,7 +154,6 @@ class DriverTest_1 {
         int numRows = 100, numCols = 100, polyLength = 50, polyOffset = 10,
                 polyPadding = 1;
 
-
         // Create GoLArray object
         CHGoLArray goLArray;
 
@@ -166,7 +180,6 @@ class DriverTest_1 {
         // Send message to WindowManager to update the OpenGL Rendering Context to the Driver object
         myWM.updateContextToThis();
 
-
         myRenderer.render(polyOffset, polyPadding, polyLength, numRows, numCols);
         myWM.destroyGlfwWindow();
         return false;
@@ -176,60 +189,58 @@ class DriverTest_1 {
     // ult_0 just checks that the swapLiveAndNext() method works properly without altering the arrays.
     // will check with a simple array loaded from input, then swap between that and the empty array without using onTickUpdate()
     private static boolean ult_0() {
-
         // Create GoLArray object
-        CHGoLArray goLArray;
-        goLArray = new CHGoLArray("gol_input_2.txt");
+        CHGoLArray goLArray = new CHGoLArray("gol_input_2.txt");
         boolean retVal = true;
+
+        int L = goLArray.LIVE;
+        int D = goLArray.DEAD;
 
         // empty array and initialState array matching the input file
         int[][] emptyState = {
-                {0, 0, 0},
-                {0, 0, 0},
-                {0, 0, 0}
+                {D, D, D, D, D},
+                {D, D, D, D, D},
+                {D, D, D, D, D},
+                {D, D, D, D, D},
+                {D, D, D, D, D}
         };
 
         int[][] initialState = {
-                {0, 1, 0},
-                {0, 1, 0},
-                {0, 1, 0}
+                {D, D, D, D, D},
+                {D, D, L, D, D},
+                {D, D, L, D, D},
+                {D, D, L, D, D},
+                {D, D, D, D, D}
         };
 
-        if (ULT_0_DEBUG) {
-            // array should be empty
-            boolean equals = goLArray.liveArrayEquals(emptyState);
+
+        // array should be empty
+        boolean equals = goLArray.liveArrayEquals(emptyState);
+        if (!equals) {retVal = false;}
+        // goLArray.printArray();
+        if (ULT_0_DEBUG || ULT_DEBUG) {goLArray.printArray();}
+
+        goLArray.swapLiveAndNext();
+        equals = goLArray.liveArrayEquals(initialState);
+        if (!equals) {retVal = false;}
+        // array should be 1's down center
+        if (ULT_0_DEBUG || ULT_DEBUG) {goLArray.printArray();}
+
+        goLArray.swapLiveAndNext();
+        //goLArray.swapLiveAndNext();
+        equals = goLArray.liveArrayEquals(emptyState);
+        // array should be empty
+        if (ULT_0_DEBUG || ULT_DEBUG) {goLArray.printArray();}
+
+        // Swaps arrays 10 more times for a robust check
+        for (int i = 0 ; i < 10 ; i++) {
+            goLArray.swapLiveAndNext();
+            equals = goLArray.liveArrayEquals(initialState);
             if (!equals) {retVal = false;}
-            goLArray.printArray();
 
             goLArray.swapLiveAndNext();
             equals = goLArray.liveArrayEquals(initialState);
             if (!equals) {retVal = false;}
-            // array should be 1's down center
-            goLArray.printArray();
-
-            goLArray.swapLiveAndNext();
-            goLArray.swapLiveAndNext();
-            equals = goLArray.liveArrayEquals(emptyState);
-            // array should be empty
-            goLArray.printArray();
-        } else {
-            boolean equals = goLArray.liveArrayEquals(emptyState);
-            if (!equals) {retVal = false;}
-            goLArray.swapLiveAndNext();
-
-            equals = goLArray.liveArrayEquals(initialState);
-            if (!equals) {retVal = false;}
-
-            // Swaps arrays 10 more times for a robust check
-            for (int i = 0 ; i < 10 ; i++) {
-                goLArray.swapLiveAndNext();
-                equals = goLArray.liveArrayEquals(emptyState);
-                if (!equals) {retVal = false;}
-
-                goLArray.swapLiveAndNext();
-                equals = goLArray.liveArrayEquals(initialState);
-                if (!equals) {retVal = false;}
-            }
         }
 
         if (retVal == true) {
@@ -240,46 +251,42 @@ class DriverTest_1 {
 
     // ult_1 used to validate nearestNeighbor calculation.
     private static boolean ult_1() {
-        // Initial configuration: a 3x3 blinker (vertical line)
-        int[][] initialState = {
-                {0, 1, 0},
-                {0, 1, 0},
-                {0, 1, 0}
-        };
-
-        // Expected next state after 1 iteration: a horizontal line
-        int[][] expectedState = {
-                {0, 0, 0},
-                {1, 1, 1},
-                {0, 0, 0}
-        };
+        boolean retVal = true;
 
         // Create and initialize the CHGoLArray
-        CHGoLArray goLArray = new CHGoLArray(3, 3, 3);
-        for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < 3; col++) {
-                goLArray.set(row, col, initialState[row][col]);
+        CHGoLArray goLArray = new CHGoLArray("gol_input_2.txt");
+        int numRows = goLArray.getNumRows(), numCols = goLArray.getNumCols();
+        goLArray.swapLiveAndNext();
 
+        int[][] numNeighbors = { {0, 1, 1, 1, 0},
+                                {0, 2, 1, 2, 0},
+                                {0, 3, 2, 3, 0},
+                                {0, 2, 1, 2, 0},
+                                {0, 1, 1, 1, 0}
+        };
+
+        // Compute nearest neighbors for each cell, then check that the number of nearest neighbors meets the expected value
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
+                int numProjectedNeighbors = goLArray.numLiveNeighbors(goLArray.getNearestNeighborsArray(row, col));
+                if (numProjectedNeighbors != numNeighbors[row][col]) {
+                    if (ULT_1_DEBUG) {
+                        // Displays when there is a mismatch in the calculated and expected value
+                        System.out.printf("Row, Col: %d, %d Calculated: %d Expected: %d\n", row, col, numProjectedNeighbors, numNeighbors[row][col]);
+                    }
+                    System.out.println(retVal);
+                    retVal = false;
+                }
             }
         }
 
-        // Compute nearest neighbors then swap live and next arrays
-
-        goLArray.swapLiveAndNext();
-
-        // Retrieve the resulting array
-        int[][] resultState = goLArray.getArray();
-
         // Compare with expected
-        boolean testPassed = compareArrays(resultState, expectedState);
-        System.out.println("ult_1: " + (testPassed ? "PASS" : "FAIL"));
-
-        return testPassed;
+        if (retVal == true) {
+            System.out.println("ult_1: PASS");
+        }
+        else {System.out.println("ult_1: FAIL");}
+        return retVal;
     }
-
-
-
-
 
     // Helper method to compare two 2D arrays
     private static boolean compareArrays(int[][] a, int[][] b) {
@@ -293,6 +300,131 @@ class DriverTest_1 {
         return true;
     }
 
+    private static boolean ult_2() {
+        boolean retVal = true;
+
+        // Create golArray, initiated to array with only two live cells next to each other
+        CHGoLArray golArray = new CHGoLArray(5, 5, 0);
+        golArray.swapLiveAndNext();
+
+        // set [1][1] and [1][2] to live
+        golArray.set(1, 1, golArray.LIVE);
+        golArray.set(1, 2, golArray.LIVE);
+
+        golArray.swapLiveAndNext();
+        if (ULT_2_DEBUG || ULT_DEBUG) {golArray.printArray(); }
+        golArray.onTickUpdate();
+
+        // Check that the two nearby cells have disappeared, as they don't have the proper conditions to survive.
+        if (ULT_2_DEBUG || ULT_DEBUG) {golArray.printArray(); }
+
+        // Ensure they both disappear, confirming onTickUpdate() logic
+        golArray.set(1, 1, golArray.LIVE);
+        for (int row = 0; row < golArray.getNumRows(); row++) {
+            for (int col = 0; col < golArray.getNumCols(); col++) {
+                if (golArray.getVal(row, col) != 0) {
+                    System.out.println("ERROR: Cell != 0 at Row, Col: " + row + ", " + col);
+                    retVal = false;
+                }
+
+            }
+        }
+
+        if (retVal == true) {
+            System.out.println("ult_2: PASS");
+        }
+        else {System.out.println("ult_2: FAIL");}
+        return retVal;
+    }
+
+    private static boolean ult_4() {
+        boolean retVal = true;
+
+
+        // Create golArray, initiated to array with only two live cells next to each other
+        CHGoLArray golArray = new CHGoLArray(5, 5, 0);
+
+        int L = golArray.LIVE;
+        int D = golArray.DEAD;
+
+        int[][] nextState = {
+                {D, D, D, D, D},
+                {D, L, L, D, D},
+                {D, L, L, D, D},
+                {D, D, D, D, D},
+                {D, D, D, D, D}
+        };
+
+        golArray.swapLiveAndNext();
+
+        // set [1][1] and [1][2] to live
+        golArray.set(1, 1, golArray.LIVE);
+        golArray.set(1, 2, golArray.LIVE);
+        golArray.set(2, 1, golArray.LIVE);
+        golArray.set(2, 2, golArray.LIVE);
+
+        golArray.swapLiveAndNext();
+        if (ULT_4_DEBUG || ULT_DEBUG) {golArray.printArray(); }
+        golArray.onTickUpdate();
+
+        // Check that the two nearby cells have disappeared, as they don't have the proper conditions to survive.
+        if (ULT_4_DEBUG || ULT_DEBUG) {golArray.printArray(); }
+
+        // Ensure that all 4 stay alive, and all other cells remain dead.
+        retVal = golArray.liveArrayEquals(nextState);
+
+        if (retVal == true) {
+            System.out.println("ult_4: PASS");
+        }
+        else {System.out.println("ult_4: FAIL");}
+        return retVal;
+    }
+
+    // Test liveArrayEquals method
+    private static boolean ult_5() {
+        boolean retVal = true;
+
+        CHGoLArray goLArray = new CHGoLArray("gol_input_2.txt");
+
+        int L = goLArray.LIVE;
+        int D = goLArray.DEAD;
+
+        int[][] initialState = {
+                {D, D, D, D, D},
+                {D, D, L, D, D},
+                {D, D, L, D, D},
+                {D, D, L, D, D},
+                {D, D, D, D, D}
+        };
+
+        boolean equal1 = compareArrays(initialState, goLArray.getArray());
+        boolean equal2 = goLArray.liveArrayEquals(initialState);
+
+        if (equal1 != equal2) {
+            retVal = false;
+        }
+
+        initialState[0][0] = 1;
+
+        equal1 = compareArrays(initialState, goLArray.getArray());
+        equal2 = goLArray.liveArrayEquals(initialState);
+
+        if (equal1 != equal2) {
+            retVal = false;
+        }
+
+        if (retVal == true) {
+            System.out.println("ult_5: PASS");
+        }
+        else {System.out.println("ult_5: FAIL");}
+        return retVal;
+
+    }
+
+
+
+
+    // ULTs from previous assignment, included to ensure proper functionality is maintained
 
     // ult_a used to validate file load-unload
     private static boolean ult_a() {

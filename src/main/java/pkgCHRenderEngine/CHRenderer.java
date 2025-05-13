@@ -148,11 +148,7 @@ public class CHRenderer {
         NUM_COLS = golArray.getNumCols();
 
         // Initialize geometry manager
-
         geometryManager = new CHGeometryManager(NUM_ROWS, NUM_COLS, OFFSET, SIZE, PADDING, winWidthHeight);
-
-        // TODO: I believe I need to update the context from within the driver
-        //myWM.updateContextToThis();
 
         myFloatBuffer = BufferUtils.createFloatBuffer(OGL_MATRIX_SIZE);
         renderLoop();

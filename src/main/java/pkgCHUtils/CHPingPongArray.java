@@ -23,11 +23,11 @@ public class CHPingPongArray {
     Random rand = new Random();
     private int DEFAULT_VALUE = 99;
 
-    protected record RCPair (int row, int col) {
+    public record RCPair (int row, int col) {
 
     } // private record RCPair(...)
 
-    RCPair pair;
+    public RCPair pair;
 
     public RCPair[] getNearestNeighborsArray(int orgRow, int orgCol) {
         RCPair[] neighbors = new RCPair[8];
@@ -61,12 +61,11 @@ public class CHPingPongArray {
         this.randMax = randMax;
 
         // Randomly initialize array
-        /*
         for (int row = 0; row < numRows; ++row) {
             for (int col = 0; col < numCols; ++col) {
                 nextArray[row][col] = 0;
             }
-        }*/
+        }
 
         initArrays();
     } // CHPingPongArray(...)
@@ -220,14 +219,17 @@ public class CHPingPongArray {
         }
     } // copyNextToLiveArray()
 
-
-
+    public void copyToNextArray(int [][] array) {
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
+                nextArray[row][col] = array[row][col];
+            }
+        }
+    }
 
     public void set(int row, int col, int newValue) {
         nextArray[row][col] = newValue;
     } // set(...)
-
-
 
     // Should update the nextArray to the sum of the nearest neighbor elements in the liveArray
     public void updateToNNSum() {
@@ -279,13 +281,14 @@ public class CHPingPongArray {
         // make the live array equal the next array
         copyNextToLiveArray();
 
-        // make the nextArray equal temp, which was the previous state of the liveArray
-        int[][] nextArray = temp;
+        // Make the nextArray equal temp, which was the previous state of the liveArray
+        //copyToNextArray(temp);    // Doesn't work
+        int[][] nextArray = temp;   // Works
+        //nextArray = temp;         // Doesn't work
 
+        // Old Buggy Implementation:
         /*
-
         int[][] temp = liveArray;
-
         liveArray = nextArray.clone();
         int[][] nextArray = temp.clone();*/
 

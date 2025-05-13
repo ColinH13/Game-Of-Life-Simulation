@@ -43,7 +43,6 @@ public class CHGeometryManager {
         // FPV = Number of floats (coordinates) per tile
         //TODO: Change back from testing
         float[] myVertices = new float[rowTiles * columnTiles * FPV * VPT];
-        //float[] myVertices = new float[(rowTiles + 1) * (columnTiles + 1) * 2];
 
         for (int row = 0; row < rowTiles; row++) {
             for (int col = 0; col < columnTiles; col++) {
@@ -51,8 +50,6 @@ public class CHGeometryManager {
                 int myIndx = (row * columnTiles + col) * VPT * FPV;
                 int xmin = OFFSET + col * (SIZE + PADDING);
                 int ymin = winWidthHeight[1] - (OFFSET + SIZE + row * (SIZE + PADDING));
-
-                // replaced previous code with new method
 
                 boolean result = fillArrayWithTileVertices(myVertices, myIndx, xmin, ymin);
 
@@ -62,14 +59,6 @@ public class CHGeometryManager {
                 }
             }
         }
-
-        // TODO: Remove Test
-        /*
-        System.out.println("myVertices Size: " + myVertices.length);
-        for (int i = 0; i < myVertices.length; i++) {
-            System.out.println("myVertices[" + i + "]: " + myVertices[i]);
-        }*/
-
         return myVertices;
     }
 
