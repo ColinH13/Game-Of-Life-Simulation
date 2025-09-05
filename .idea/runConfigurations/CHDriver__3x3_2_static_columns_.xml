@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="CHDriver (3x3 static)" type="Application" factoryName="Application">
+  <configuration default="false" name="CHDriver (3x3 2 static columns)" type="Application" factoryName="Application">
     <option name="ALTERNATIVE_JRE_PATH" value="23" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="pkgCHCSC133.CHDriver" />
