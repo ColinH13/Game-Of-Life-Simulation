@@ -1,39 +1,38 @@
 package pkgCHCSC133;
 
-import pkgCHRenderEngine.CHGeometryManager;
+//import pkgCHRenderEngine.CHGeometryManager;
 import pkgCHRenderEngine.CHRenderer;
 import pkgCHUtils.CHGoLArray;
 import pkgCHUtils.CHPingPongArray;
 import pkgCHUtils.CHPingPongArrayLive;
 import pkgCHUtils.CHWindowManager;
 
-import java.io.FileWriter;
-import java.io.PrintWriter;
+//import java.io.FileWriter;
+//import java.io.PrintWriter;
 
 class DriverTest_1 {
     // Used to help create arrays for debugging
     CHGoLArray goLArray;
-    private int L = goLArray.LIVE;
-    private int D = goLArray.DEAD;
+    //private int L = goLArray.LIVE;
+    //private int D = goLArray.DEAD;
 
     // All debug statements will print if this is true
-    private static boolean ULT_DEBUG = false;
+    private static final boolean ULT_DEBUG = false;
 
     // Print debug statements for individual ULTs
-    private static boolean ULT_A_DEBUG = false;
-    private static boolean ULT_B_DEBUG = false;
-    private static boolean ULT_C_DEBUG = false;
-    private static boolean ULT_D_DEBUG = false;
+    private static final boolean ULT_A_DEBUG = false;
+    private static final boolean ULT_B_DEBUG = false;
+    private static final boolean ULT_C_DEBUG = false;
+    private static final boolean ULT_D_DEBUG = false;
 
-    private static boolean ULT_0_DEBUG = false;
-    private static boolean ULT_1_DEBUG = false;
-    private static boolean ULT_2_DEBUG = false;
-    private static boolean ULT_3_DEBUG = false;
-    private static boolean ULT_4_DEBUG = false;
-    private static boolean ULT_5_DEBUG = false;
+    private static final boolean ULT_0_DEBUG = false;
+    private static final boolean ULT_1_DEBUG = false;
+    private static final boolean ULT_2_DEBUG = false;
+    private static final boolean ULT_3_DEBUG = false;
+    private static final boolean ULT_4_DEBUG = false;
+    private static final boolean ULT_5_DEBUG = false;
 
-
-    private static boolean VISUAL_TEST = false;
+    private static final boolean DISPLAY_SIM = false;
 
     public static void main(String[] args) {
         // Old ULTs from previous assignment
@@ -52,7 +51,7 @@ class DriverTest_1 {
         ult_5(); // Ensure proper comparison of arrays
 
 
-        if (VISUAL_TEST) {
+        if (DISPLAY_SIM) {
             // Essentially a copy of the driver, displays an oscillating line of length 3.
             visual_test();
         }
@@ -94,7 +93,7 @@ class DriverTest_1 {
                 {D, D, D, D, D}
         };
 
-        if (ULT_3_DEBUG) {
+        if (ULT_3_DEBUG || ULT_DEBUG) {
             // Check that the live array is initialized empty when reading from a file
             boolean equals = goLArray.liveArrayEquals(emptyState);
             if (!equals) {retVal = false;}
@@ -270,7 +269,7 @@ class DriverTest_1 {
             for (int col = 0; col < numCols; col++) {
                 int numProjectedNeighbors = goLArray.numLiveNeighbors(goLArray.getNearestNeighborsArray(row, col));
                 if (numProjectedNeighbors != numNeighbors[row][col]) {
-                    if (ULT_1_DEBUG) {
+                    if (ULT_1_DEBUG || ULT_DEBUG) {
                         // Displays when there is a mismatch in the calculated and expected value
                         System.out.printf("Row, Col: %d, %d Calculated: %d Expected: %d\n", row, col, numProjectedNeighbors, numNeighbors[row][col]);
                     }
