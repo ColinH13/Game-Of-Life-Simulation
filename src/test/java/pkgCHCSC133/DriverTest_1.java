@@ -63,7 +63,7 @@ class DriverTest_1 {
     private static boolean ult_3() {
         // Create GoLArray object
         CHGoLArray goLArray;
-        goLArray = new CHGoLArray("gol_input_2.txt");
+        goLArray = new CHGoLArray("input_files/gol_input_2.txt");
         int L = goLArray.LIVE;
         int D = goLArray.DEAD;
         boolean retVal = true;
@@ -158,7 +158,7 @@ class DriverTest_1 {
         CHGoLArray goLArray;
 
             // takes file input
-            goLArray = new CHGoLArray("gol_input_2.txt");
+            goLArray = new CHGoLArray("input_files/gol_input_2.txt");
 
             numRows = goLArray.getNumRows();
             numCols = goLArray.getNumCols();
@@ -190,7 +190,7 @@ class DriverTest_1 {
     // will check with a simple array loaded from input, then swap between that and the empty array without using onTickUpdate()
     private static boolean ult_0() {
         // Create GoLArray object
-        CHGoLArray goLArray = new CHGoLArray("gol_input_2.txt");
+        CHGoLArray goLArray = new CHGoLArray("input_files/gol_input_2.txt");
         boolean retVal = true;
 
         int L = goLArray.LIVE;
@@ -254,7 +254,7 @@ class DriverTest_1 {
         boolean retVal = true;
 
         // Create and initialize the CHGoLArray
-        CHGoLArray goLArray = new CHGoLArray("gol_input_2.txt");
+        CHGoLArray goLArray = new CHGoLArray("input_files/gol_input_2.txt");
         int numRows = goLArray.getNumRows(), numCols = goLArray.getNumCols();
         goLArray.swapLiveAndNext();
 
@@ -384,7 +384,7 @@ class DriverTest_1 {
     private static boolean ult_5() {
         boolean retVal = true;
 
-        CHGoLArray goLArray = new CHGoLArray("gol_input_2.txt");
+        CHGoLArray goLArray = new CHGoLArray("input_files/gol_input_2.txt");
 
         int L = goLArray.LIVE;
         int D = goLArray.DEAD;
@@ -439,8 +439,8 @@ class DriverTest_1 {
         CHPingPongArrayLive ppa_1 = new CHPingPongArrayLive(ROWS, COLS, numLiveCells);
         CHPingPongArrayLive ppa_2 = new CHPingPongArrayLive(ROWS, COLS, numLiveCells);
 
-        ppa_1.loadFile("ult_a_input.txt");
-        ppa_2.loadFile("ult_a_verify.txt");
+        ppa_1.loadFile("input_files/ult_a_input.txt");
+        ppa_2.loadFile("input_files/ult_a_verify.txt");
         ppa_2.swapLiveAndNext();
 
 
