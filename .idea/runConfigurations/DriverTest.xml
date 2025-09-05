@@ -1,7 +1,9 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="DriverTest" type="Application" factoryName="Application">
+    <option name="ALTERNATIVE_JRE_PATH" value="openjdk-23" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="pkgCHCSC133.DriverTest_1" />
-    <module name="CHAssignment-9.test" />
+    <module name="CHAssignment-3.test" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
