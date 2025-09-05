@@ -1,21 +1,14 @@
 package pkgCHCSC133;
 
-//import pkgCHRenderEngine.CHGeometryManager;
 import pkgCHRenderEngine.CHRenderer;
 import pkgCHUtils.CHGoLArray;
 import pkgCHUtils.CHPingPongArray;
 import pkgCHUtils.CHPingPongArrayLive;
 import pkgCHUtils.CHWindowManager;
 
-//import java.io.FileWriter;
-//import java.io.PrintWriter;
+
 
 class DriverTest_1 {
-    //TODO: Remove unused code
-    // Used to help create arrays for debugging
-    //CHGoLArray goLArray;
-    //private int L = goLArray.LIVE;
-    //private int D = goLArray.DEAD;
 
     // All debug statements will print if this is true
     private static final boolean ULT_DEBUG = false;
@@ -36,7 +29,7 @@ class DriverTest_1 {
     private static final boolean DISPLAY_SIM = false;
 
     public static void main(String[] args) {
-        // Old ULTs from previous assignment
+        // Old ULTs
         //ult_a();
         //ult_b();
         //ult_c();
