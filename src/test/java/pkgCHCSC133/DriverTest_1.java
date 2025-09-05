@@ -11,8 +11,9 @@ import pkgCHUtils.CHWindowManager;
 //import java.io.PrintWriter;
 
 class DriverTest_1 {
+    //TODO: Remove unused code
     // Used to help create arrays for debugging
-    CHGoLArray goLArray;
+    //CHGoLArray goLArray;
     //private int L = goLArray.LIVE;
     //private int D = goLArray.DEAD;
 
@@ -227,7 +228,7 @@ class DriverTest_1 {
 
         goLArray.swapLiveAndNext();
         //goLArray.swapLiveAndNext();
-        equals = goLArray.liveArrayEquals(emptyState);
+        //equals = goLArray.liveArrayEquals(emptyState);
         // array should be empty
         if (ULT_0_DEBUG || ULT_DEBUG) {goLArray.printArray();}
 
@@ -427,7 +428,7 @@ class DriverTest_1 {
 
     // ult_a used to validate file load-unload
     private static boolean ult_a() {
-        boolean retVal = false;
+        boolean retVal;
 
         if (ULT_DEBUG || ULT_A_DEBUG) {
             System.out.println("Placeholder text for ult_a debug statement");
@@ -511,7 +512,7 @@ class DriverTest_1 {
         }
         if (retVal) {
             System.out.println("ult_b: PASS");
-        } else if (!retVal) {System.out.println("ult_b: FAIL");}
+        } else {System.out.println("ult_b: FAIL");}
         return retVal;
     } // private static boolean ult_b()
 
@@ -548,7 +549,7 @@ class DriverTest_1 {
         }
         if (retVal) {
             System.out.println("ult_c: PASS");
-        } else if (!retVal) {System.out.println("ult_c: FAIL");}
+        } else {System.out.println("ult_c: FAIL");}
         return retVal;
     } // private static boolean ult_c()
 
@@ -583,7 +584,7 @@ class DriverTest_1 {
         }
 
         if (retVal) {System.out.println("ult_d: PASS");}
-        else if (!retVal) {System.out.println("ult_d: FAIL");}
+        else {System.out.println("ult_d: FAIL");}
         return retVal;
     } // private static boolean ult_d()
 }
